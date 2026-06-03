@@ -1,0 +1,13 @@
+*.pickle
+*.txt
+*.log
+credentials/
+tokens/
+__pycache__/
+*.pyc
+.DS_Store
+cookies_*
+.env
+*.png
+*.jpg
+*.jpeg
