@@ -67,12 +67,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-card{background:#fff;padding:16px 18px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 .stat-card .num{font-size:24px;font-weight:700;color:#2563eb}
 .stat-card .label{font-size:12px;color:#64748b;margin-top:3px}
-.case-type-summary{background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
-.case-type-summary h3{font-size:14px;color:#64748b;margin-bottom:12px;font-weight:600}
-.case-type-grid{display:flex;flex-wrap:wrap;gap:10px}
-.case-type-item{background:#f8fafc;padding:8px 16px;border-radius:20px;font-size:13px}
-.case-type-item .type-name{color:#334155;font-weight:500}
-.case-type-item .type-count{color:#2563eb;font-weight:700;margin-left:8px}
 .customer-card{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer;transition:all 0.2s;border:2px solid transparent}
 .customer-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.12);border-color:#93c5fd}
 .customer-card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
@@ -125,14 +119,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="stat-card"><div class="num" id="caseTypes">0</div><div class="label">Case Types</div></div>
 </div>
 
-<!-- Case Type Summary Window -->
-<div class="case-type-summary" id="caseTypeSummary">
-  <h3>📊 Customers by Case Type</h3>
-  <div class="case-type-grid" id="caseTypeGrid">
-    <span style="font-size:12px;color:#94a3b8;">Loading...</span>
-  </div>
-</div>
-
 <div id="customerList"></div>
 <div class="footer">Nova Immigration System | Real-time data</div>
 
@@ -162,41 +148,8 @@ async function loadData(){
     document.getElementById('totalMessages').textContent=s.total_files;
     document.getElementById('newToday').textContent=s.new_today;
     document.getElementById('caseTypes').textContent=s.case_types;
-    
-    // Render case type summary
-    renderCaseTypeSummary(s.case_type_counts || {});
-    
     renderCustomers(d.customers);
   }catch(e){document.getElementById('customerList').innerHTML='<div class="no-result">Failed to load data</div>'}
-}
-
-function renderCaseTypeSummary(caseTypeCounts){
-  const container = document.getElementById('caseTypeGrid');
-  const types = Object.keys(caseTypeCounts);
-  if(types.length === 0){
-    container.innerHTML = '<span style="font-size:12px;color:#94a3b8;">No case types assigned</span>';
-    return;
-  }
-  
-  // Sort by count descending
-  types.sort((a,b) => caseTypeCounts[b] - caseTypeCounts[a]);
-  
-  container.innerHTML = types.map(type => `
-    <div class="case-type-item">
-      <span class="type-name">${escapeHtml(type)}</span>
-      <span class="type-count">${caseTypeCounts[type]}</span>
-    </div>
-  `).join('');
-}
-
-function escapeHtml(str){
-  if(!str) return '';
-  return str.replace(/[&<>]/g, function(m){
-    if(m === '&') return '&amp;';
-    if(m === '<') return '&lt;';
-    if(m === '>') return '&gt;';
-    return m;
-  });
 }
 
 function renderCustomers(list){
@@ -229,10 +182,10 @@ function renderCustomers(list){
     const badge=c.is_new?'<span class="badge badge-new">NEW</span>':'';
     const act=c.activity;
     return '<div class="customer-card" onclick="showDetail(\\''+c.customerId+'\\')">'
-      +'<div class="top"><div class="name">'+escapeHtml(p.name)+' '+badge+'</div><div class="cid">'+(c.displayId||c.customerId)+'</div></div>'
+      +'<div class="top"><div class="name">'+p.name+' '+badge+'</div><div class="cid">'+(c.displayId||c.customerId)+'</div></div>'
       +'<div class="detail">📞 <span>'+(p.phone||'—')+'</span> &nbsp;📧 <span>'+(p.email||'—')+'</span></div>'
       +'<div class="channels">'+chs.join('')+'</div>'
-      + (c.topic ? '<div class="detail" style="margin-top:4px;font-size:12px;color:#2563eb">Topic: ' + escapeHtml(c.topic) + '</div>' : '')
+      + (c.topic ? '<div class="detail" style="margin-top:4px;font-size:12px;color:#2563eb">Topic: ' + c.topic + '</div>' : '')
       +'<div class="activity-bar">📁 '+act.total_files+' files ('+act.total_size_kb+' KB)'+(act.last_activity?' | '+act.last_activity:'')+'</div>'
       +'</div>';
   }).join('');
@@ -252,8 +205,8 @@ async function showDetail(custId){
       +'<tr><td>Phone</td><td>'+(p.phone||'—')+'</td></tr>'
       +'<tr><td>Email</td><td>'+(p.email||'—')+'</td></tr>'
       +'<tr><td>Channels</td><td>';
-    if(ch.messenger)html+='FB: '+escapeHtml(ch.messenger)+'<br>';
-    if(ch.whatsapp)html+='WA: '+escapeHtml(ch.whatsapp)+'<br>';
+    if(ch.messenger)html+='FB: '+ch.messenger+'<br>';
+    if(ch.whatsapp)html+='WA: '+ch.whatsapp+'<br>';
     if(ch.line)html+='LINE: '+ch.line.join(', ')+'<br>';
     html+='</td></tr></table></div>';
 
@@ -262,8 +215,8 @@ async function showDetail(custId){
       const l=d.lead;
       html+='<div class="detail-section"><h3>Registration Info</h3><div class="lead-box">'
         +'<span class="lb-label">Submitted:</span> <span class="lb-val">'+(l.submitted_at||'')+'</span><br>';
-      if(l.topic)html+='<span class="lb-label">Topic:</span> <span class="lb-val">'+escapeHtml(l.topic)+'</span><br>';
-      if(l.customer_type)html+='<span class="lb-label">Type:</span> <span class="lb-val">'+escapeHtml(l.customer_type)+'</span>';
+      if(l.topic)html+='<span class="lb-label">Topic:</span> <span class="lb-val">'+l.topic+'</span><br>';
+      if(l.customer_type)html+='<span class="lb-label">Type:</span> <span class="lb-val">'+l.customer_type+'</span>';
       html+='</div></div>';
     }
 
@@ -271,7 +224,7 @@ async function showDetail(custId){
     if(act.files&&act.files.length){
       html+='<div class="detail-section"><h3>Files ('+act.files.length+')</h3><div class="file-list">';
       act.files.slice().reverse().slice(0,30).forEach(f=>{
-        html+='<div class="file-item"><span class="fname">'+f.date+' — '+escapeHtml(f.name)+'</span><span class="fsize">'+f.size_kb+' KB</span></div>';
+        html+='<div class="file-item"><span class="fname">'+f.date+' — '+f.name+'</span><span class="fsize">'+f.size_kb+' KB</span></div>';
       });
       html+='</div></div>';
     }
@@ -317,31 +270,20 @@ class AdminHandler(BaseHTTPRequestHandler):
         today = datetime.datetime.now().strftime("%Y-%m-%d")
         new_today = 0
         total_files = 0
-        case_type_counts = {}  # Changed from set to dict for counting
+        case_types = set()
         customers_data = []
-
-        # Build email -> topic mapping from leads
-        email_to_topic = {}
-        for lead in leads_list:
-            email = lead.get("email")
-            topic = lead.get("topic", "")
-            if email and topic:
-                email_to_topic[email] = topic
 
         for c in db.get("customers", []):
             cid = c["customerId"]
             activity = scan_customer_activity(cid)
             total_files += activity["total_files"]
             is_new = c.get("createdAt", "").startswith(today) if c.get("createdAt") else False
-            
-            # Get topic from leads using email
-            customer_email = c["profile"].get("email", "")
-            topic = email_to_topic.get(customer_email, "")
-            
-            # Count case types
-            if topic:
-                case_type_counts[topic] = case_type_counts.get(topic, 0) + 1
-            
+            # Get topic from leads
+            topic = ""
+            for lead in leads_list:
+                if lead.get("email") == c["profile"].get("email"):
+                    topic = lead.get("topic", "")
+                    break
             customers_data.append({
                 "customerId": cid,
                 "displayId": c.get("displayId", ""),
@@ -351,19 +293,19 @@ class AdminHandler(BaseHTTPRequestHandler):
                 "is_new": is_new,
                 "topic": topic
             })
-            
-        # Count new leads today
-        for lead in leads_list:
-            if lead.get("submitted_at", "").startswith(today):
-                new_today += 1
+            # Count new today from leads
+            for lead in leads_list:
+                if lead.get("submitted_at", "").startswith(today):
+                    new_today += 1
+                if lead.get("topic"):
+                    case_types.add(lead["topic"])
 
         data = {
             "stats": {
                 "total_customers": len(db.get("customers", [])),
                 "total_files": total_files,
                 "new_today": new_today,
-                "case_types": len(case_type_counts),  # Number of unique case types
-                "case_type_counts": case_type_counts  # NEW: counts per case type
+                "case_types": len(case_types)
             },
             "customers": customers_data
         }
