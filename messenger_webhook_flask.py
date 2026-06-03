@@ -333,31 +333,6 @@ def landing_verify_code():
         return jsonify({"error": str(e)}), 500
 
 
-
-
-FORWARD_URL_LANDING = "https://benpc.tailf7faa5.ts.net/landing"
-
-
-@app.route("/landing/send-code", methods=["POST"])
-def landing_send_code():
-    data = request.get_json(force=True)
-    try:
-        resp = requests.post(FORWARD_URL_LANDING + "/send-code", json=data, timeout=10)
-        return (resp.text, resp.status_code, resp.headers.items())
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route("/landing/verify-code", methods=["POST"])
-def landing_verify_code():
-    data = request.get_json(force=True)
-    try:
-        resp = requests.post(FORWARD_URL_LANDING + "/verify-code", json=data, timeout=10)
-        return (resp.text, resp.status_code, resp.headers.items())
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
 if __name__ == "__main__":
     print("Nova BOT Multi-Channel Webhook ready!")
     print("  FB:  /webhook")
