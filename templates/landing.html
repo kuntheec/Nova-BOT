@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Global Manpower — Immigration Services</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .logo {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .logo h1 {
+    font-size: 22px;
+    color: #1e293b;
+    margin-bottom: 4px;
+  }
+  .logo p {
+    font-size: 14px;
+    color: #64748b;
+  }
+  .form-group {
+    margin-bottom: 18px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 6px;
+  }
+  label .optional {
+    font-weight: 400;
+    color: #94a3b8;
+    font-size: 12px;
+  }
+  input, select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+  }
+  .btn {
+    width: 100%;
+    padding: 14px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .btn:hover { background: #1d4ed8; }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .note {
+    font-size: 12px;
+    color: #64748b;
+    text-align: center;
+    margin-top: 20px;
+    line-height: 1.5;
+  }
+  .success {
+    display: none;
+    text-align: center;
+    padding: 30px 0;
+  }
+  .success .check {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  .success h2 { color: #16a34a; margin-bottom: 8px; }
+  .success p { color: #64748b; font-size: 14px; line-height: 1.6; }
+  .error-msg {
+    display: none;
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .channels-hint {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<div class="card" id="formCard">
+  <div class="logo">
+    <h1>🌏 The Global Manpower</h1>
+    <p>Immigration Consultation — ลงทะเบียนรับคำปรึกษา</p>
+  </div>
+
+  <div class="channels-hint">
+    กรุณากรอกข้อมูลที่ติดต่อได้สะดวก เพื่อให้เราสามารถติดต่อและส่งเอกสารกลับถึงคุณได้ทุกช่องทาง<br><strong>ถ้าลงทะเบียนแล้ว — กรอกอีเมลเดิม ระบบจะอัปเดตข้อมูลให้อัตโนมัติ</strong>
+  </div>
+
+  <form id="leadForm">
+    <div class="form-group">
+      <label>ชื่อ-นามสกุล <span class="optional">*</span></label>
+      <input type="text" name="name" required placeholder="เช่น สมชาย ใจดี">
+    </div>
+
+    <div class="form-group">
+      <label>เบอร์โทรศัพท์ <span class="optional">*</span></label>
+      <input type="tel" name="phone" required placeholder="เช่น 0212345678">
+    </div>
+
+    <div class="form-group">
+      <label>อีเมล <span class="optional">*</span></label>
+      <input type="email" name="email" required placeholder="your@email.com">
+    </div>
+
+    <div class="form-group">
+      <label>LINE ID <span class="optional">(optional)</span></label>
+      <input type="text" name="line_id" placeholder="LINE ID หรือเบอร์ที่ลงทะเบียน LINE">
+    </div>
+
+    <div class="form-group">
+      <label>Facebook Messenger <span class="optional">(optional)</span></label>
+      <input type="text" name="messenger_id" placeholder="ชื่อบัญชี Facebook หรือลิงก์โปรไฟล์">
+    </div>
+
+    <div class="form-group">
+      <label>WhatsApp <span class="optional">(optional)</span></label>
+      <input type="tel" name="whatsapp" placeholder="เบอร์ WhatsApp (รวมรหัสประเทศ)">
+    </div>
+
+    <div class="form-group">
+      <label>หัวข้อที่ต้องการปรึกษา</label>
+      <select name="topic">
+        <option value="visa">ขอ Visa / ต่อ Visa</option>
+        <option value="residency">ถิ่นที่อยู่ (Residency)</option>
+        <option value="work">ใบอนุญาตทำงาน</option>
+        <option value="family">Family / Partner Visa</option>
+        <option value="other">อื่นๆ</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn" id="submitBtn">ส่งข้อมูล</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </form>
+
+  <div class="note">
+    ข้อมูลของคุณจะถูกเก็บเป็นความลับและใช้สำหรับการให้คำปรึกษาเท่านั้น
+  </div>
+</div>
+
+<!-- Success Screen -->
+<div class="card" id="successCard" style="display:none;">
+  <div class="success">
+    <div class="check">✅</div>
+    <h2>ส่งข้อมูลสำเร็จ!</h2>
+    <p>เราจะติดต่อกลับโดยเร็วที่สุดทางช่องทางที่คุณเลือกไว้<br>ขอบคุณที่ใช้บริการ The Global Manpower</p>
+  </div>
+</div>
+
+<script>
+document.getElementById('leadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const errEl = document.getElementById('errorMsg');
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+  errEl.style.display = 'none';
+
+  const formData = new FormData(this);
+  const data = Object.fromEntries(formData.entries());
+
+  try {
+    const res = await fetch('/landing/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(text || 'ส่งข้อมูลไม่สำเร็จ');
+    }
+
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('successCard').style.display = 'block';
+  } catch (err) {
+    errEl.textContent = 'เกิดข้อผิดพลาด: ' + err.message + ' กรุณาลองอีกครั้ง';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'ส่งข้อมูล';
+  }
+});
+</script>
+</body>
+</html>
