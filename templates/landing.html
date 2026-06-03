@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,45 +16,34 @@
     padding: 20px;
   }
   .card {
-    background: #fff;
-    border-radius: 16px;
-    padding: 40px;
-    max-width: 520px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    background: #fff; border-radius: 16px; padding: 40px;
+    max-width: 520px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
   }
-  .logo { text-align: center; margin-bottom: 24px; }
+  .lang-switch {
+    position: absolute; top: 16px; right: 16px; display: flex; gap: 4px;
+  }
+  .lang-btn {
+    padding: 4px 12px; border-radius: 6px; border: 1px solid #e2e8f0;
+    background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;
+    transition: all 0.2s; color: #94a3b8;
+  }
+  .lang-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+  .lang-btn:hover:not(.active) { background: #f1f5f9; }
+
+  .logo { text-align: center; margin-bottom: 20px; }
   .logo h1 { font-size: 22px; color: #1e293b; margin-bottom: 4px; }
   .logo p { font-size: 14px; color: #64748b; }
 
-  /* Customer Selection */
-  .option-row { display: flex; gap: 16px; margin-bottom: 24px; }
-  .option-card {
-    flex: 1; padding: 24px 16px; border-radius: 14px;
-    text-align: center; cursor: pointer; transition: all 0.2s;
-    border: 2px solid #e2e8f0;
-  }
-  .option-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-  .option-card .icon { font-size: 36px; margin-bottom: 8px; }
-  .option-card .title { font-size: 15px; font-weight: 600; }
-  .option-card .desc { font-size: 12px; color: #64748b; margin-top: 4px; }
-  .option-new { background: #eff6ff; border-color: #93c5fd; }
-  .option-new:hover { border-color: #3b82f6; background: #dbeafe; }
-  .option-new.selected { border-color: #2563eb; background: #bfdbfe; }
-  .option-existing { background: #f0fdf4; border-color: #86efac; }
-  .option-existing:hover { border-color: #22c55e; background: #dcfce7; }
-  .option-existing.selected { border-color: #16a34a; background: #bbf7d0; }
-
-  /* Company Contact */
   .company-links {
-    background: #f8fafc; border-radius: 12px; padding: 16px;
-    margin-bottom: 24px;
+    background: #f8fafc; border-radius: 12px; padding: 14px 16px;
+    margin-bottom: 20px;
   }
-  .company-links .label { font-size: 12px; color: #64748b; margin-bottom: 10px; text-align: center; font-weight: 500; }
-  .company-links .links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .company-links .label { font-size: 11px; color: #64748b; margin-bottom: 8px; text-align: center; font-weight: 500; }
+  .company-links .links { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .company-links .link-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 500;
     text-decoration: none; transition: all 0.2s;
   }
   .link-btn-line { background: #e8f5e9; color: #06c755; }
@@ -64,80 +53,121 @@
   .link-btn-wa { background: #e8f5e9; color: #25d366; }
   .link-btn-wa:hover { background: #25d366; color: #fff; }
 
-  .form-group { margin-bottom: 18px; }
-  label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
-  label .optional { font-weight: 400; color: #94a3b8; font-size: 12px; }
+  .option-row { display: flex; gap: 14px; margin-bottom: 20px; }
+  .option-card {
+    flex: 1; padding: 22px 14px; border-radius: 14px;
+    text-align: center; cursor: pointer; transition: all 0.2s;
+    border: 2px solid #e2e8f0;
+  }
+  .option-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .option-card .icon { font-size: 32px; margin-bottom: 6px; }
+  .option-card .title { font-size: 14px; font-weight: 600; }
+  .option-card .desc { font-size: 11px; color: #64748b; margin-top: 3px; }
+  .option-new { background: #eff6ff; border-color: #93c5fd; }
+  .option-new:hover { border-color: #3b82f6; background: #dbeafe; }
+  .option-new.selected { border-color: #2563eb; background: #bfdbfe; }
+  .option-existing { background: #f0fdf4; border-color: #86efac; }
+  .option-existing:hover { border-color: #22c55e; background: #dcfce7; }
+  .option-existing.selected { border-color: #16a34a; background: #bbf7d0; }
+
+  .form-group { margin-bottom: 16px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 5px; }
+  label .optional { font-weight: 400; color: #94a3b8; font-size: 11px; }
   input, select {
-    width: 100%; padding: 12px 14px;
+    width: 100%; padding: 11px 14px;
     border: 1.5px solid #e2e8f0; border-radius: 10px;
-    font-size: 15px; transition: border-color 0.2s; outline: none;
+    font-size: 14px; transition: border-color 0.2s; outline: none;
   }
   input:focus, select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
   .input-row { display: flex; gap: 8px; }
   .input-row input { flex: 1; }
+  .input-row-3 { display: flex; gap: 8px; }
+  .input-row-3 select { width: 130px; flex-shrink: 0; }
+  .input-row-3 input { flex: 1; }
+
   .btn {
-    padding: 12px 20px; background: #2563eb; color: #fff;
-    border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+    padding: 11px 18px; background: #2563eb; color: #fff;
+    border: none; border-radius: 10px; font-size: 13px; font-weight: 600;
     cursor: pointer; transition: background 0.2s; white-space: nowrap;
   }
   .btn:hover { background: #1d4ed8; }
   .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .btn-sm { padding: 10px 16px; font-size: 13px; border-radius: 8px; }
+  .btn-sm { padding: 9px 14px; font-size: 12px; border-radius: 8px; }
   .btn-green { background: #16a34a; }
   .btn-green:hover { background: #15803d; }
-  .btn-full { width: 100%; padding: 14px; font-size: 16px; margin-top: 8px; }
+  .btn-full { width: 100%; padding: 13px; font-size: 15px; margin-top: 6px; }
   .btn-back {
     background: none; border: 1px solid #e2e8f0; color: #64748b;
-    padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;
-    margin-bottom: 16px; transition: all 0.2s;
+    padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 12px;
+    margin-bottom: 14px; transition: all 0.2s;
   }
   .btn-back:hover { background: #f1f5f9; }
-  .verify-status { display: none; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 8px; }
+
+  .verify-status { display: none; padding: 9px 12px; border-radius: 8px; font-size: 12px; margin-top: 8px; }
   .verify-ok { display: block; background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
   .verify-err { display: block; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
   .verify-loading { display: block; background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
-  .step-indicator { display: flex; gap: 8px; margin-bottom: 24px; justify-content: center; }
-  .step { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+
+  .step-indicator { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
+  .step { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
   .step-active { background: #2563eb; color: #fff; }
   .step-done { background: #16a34a; color: #fff; }
   .step-pending { background: #e2e8f0; color: #94a3b8; }
-  .step-line { width: 40px; height: 2px; align-self: center; background: #e2e8f0; }
+  .step-line { width: 36px; height: 2px; align-self: center; background: #e2e8f0; }
   .step-line-done { background: #16a34a; }
-  .note { font-size: 12px; color: #64748b; text-align: center; margin-top: 20px; line-height: 1.5; }
+
+  .note { font-size: 11px; color: #64748b; text-align: center; margin-top: 18px; line-height: 1.5; }
   .success { display: none; text-align: center; padding: 30px 0; }
   .success .check { font-size: 48px; margin-bottom: 12px; }
   .success h2 { color: #16a34a; margin-bottom: 8px; }
   .success p { color: #64748b; font-size: 14px; line-height: 1.6; }
-  .error-msg { display: none; color: #dc2626; font-size: 13px; margin-top: 10px; text-align: center; }
+  .error-msg { display: none; color: #dc2626; font-size: 12px; margin-top: 8px; text-align: center; }
 
   .retrieved-data {
-    background: #f8fafc; border-radius: 10px; padding: 16px;
-    margin-bottom: 18px; display: none;
+    background: #f8fafc; border-radius: 10px; padding: 14px;
+    margin-bottom: 16px; display: none;
   }
-  .retrieved-data .rd-label { font-size: 12px; color: #2563eb; font-weight: 600; margin-bottom: 8px; }
-  .retrieved-data .rd-row { font-size: 13px; color: #334155; line-height: 1.8; }
+  .retrieved-data .rd-label { font-size: 11px; color: #2563eb; font-weight: 600; margin-bottom: 6px; }
+  .retrieved-data .rd-row { font-size: 12px; color: #334155; line-height: 1.8; }
   .retrieved-data .rd-row span { color: #64748b; }
   .retrieved-data .rd-edit-hint {
-    font-size: 12px; color: #16a34a; margin-top: 8px;
-    padding-top: 8px; border-top: 1px solid #e2e8f0;
+    font-size: 11px; color: #16a34a; margin-top: 6px;
+    padding-top: 6px; border-top: 1px solid #e2e8f0;
   }
+  [data-lang="th"] { display: none; }
 </style>
 </head>
 <body>
 
 <div class="card" id="formCard">
-  <div class="logo">
-    <h1>The Global Manpower</h1>
-    <p>Immigration Consultation — ลงทะเบียนรับคำปรึกษา</p>
+  <!-- Language Switch -->
+  <div class="lang-switch">
+    <button class="lang-btn active" id="langEn" onclick="switchLang('en')">EN</button>
+    <button class="lang-btn" id="langTh" onclick="switchLang('th')">TH</button>
+  </div>
+
+  <!-- English Content -->
+  <div data-lang="en">
+    <div class="logo">
+      <h1>The Global Manpower</h1>
+      <p>Immigration Consultation — Register</p>
+    </div>
+  </div>
+  <!-- Thai Content -->
+  <div data-lang="th" style="display:none;">
+    <div class="logo">
+      <h1>The Global Manpower</h1>
+      <p>ลงทะเบียนรับคำปรึกษาวีซ่า</p>
+    </div>
   </div>
 
   <!-- Company Contact Info -->
   <div class="company-links">
-    <div class="label">ติดต่อเราผ่านช่องทางอื่นได้ทันที</div>
+    <div class="label" data-en="Contact us instantly via:" data-th="ติดต่อเราทันทีผ่าน:">Contact us instantly via:</div>
     <div class="links">
       <a href="https://line.me/ti/p/~@theglobalmanpower" target="_blank" class="link-btn link-btn-line">💚 LINE: @theglobalmanpower</a>
-      <a href="https://m.me/TheGlobalManpower" target="_blank" class="link-btn link-btn-fb">💬 FB: The Global Manpower</a>
-      <a href="https://wa.me/64212345678" target="_blank" class="link-btn link-btn-wa">📱 WhatsApp: 021 234 5678</a>
+      <a href="https://m.me/TheGlobalManpower" target="_blank" class="link-btn link-btn-fb">💬 Messenger</a>
+      <a href="https://wa.me/64212345678" target="_blank" class="link-btn link-btn-wa">📱 WhatsApp</a>
     </div>
   </div>
 
@@ -145,18 +175,18 @@
   <div class="option-row" id="typeSelection">
     <div class="option-card option-new" onclick="selectType('new')">
       <div class="icon">🆕</div>
-      <div class="title">New Customer</div>
-      <div class="desc">ลงทะเบียนครั้งแรก</div>
+      <div class="title" data-en="New Customer" data-th="ลูกค้าใหม่">New Customer</div>
+      <div class="desc" data-en="First time registration" data-th="ลงทะเบียนครั้งแรก">First time registration</div>
     </div>
     <div class="option-card option-existing" onclick="selectType('existing')">
       <div class="icon">🔄</div>
-      <div class="title">Existing Customer</div>
-      <div class="desc">เคยลงทะเบียนแล้ว</div>
+      <div class="title" data-en="Existing Customer" data-th="ลูกค้าเดิม">Existing Customer</div>
+      <div class="desc" data-en="Already registered" data-th="เคยลงทะเบียนแล้ว">Already registered</div>
     </div>
   </div>
 
   <div id="verifySection" style="display:none;">
-    <button class="btn-back" onclick="backToType()">← กลับ</button>
+    <button class="btn-back" onclick="backToType()">← <span data-en="Back" data-th="กลับ">Back</span></button>
 
     <!-- Step Indicator -->
     <div class="step-indicator">
@@ -172,35 +202,34 @@
     <!-- STEP 1: Email Verification -->
     <div id="step1Content">
       <div class="form-group">
-        <label>อีเมล <span class="optional">*</span></label>
+        <label data-en="Email *" data-th="อีเมล *">Email *</label>
         <div class="input-row">
           <input type="email" id="verifyEmail" required placeholder="your@email.com">
-          <button class="btn btn-sm" id="sendCodeBtn" onclick="sendCode()">ส่งรหัส</button>
+          <button class="btn btn-sm" id="sendCodeBtn" onclick="sendCode()"><span data-en="Send Code" data-th="ส่งรหัส">Send Code</span></button>
         </div>
       </div>
       <div id="verifyStatus" class="verify-status"></div>
 
       <div class="form-group" style="display:none;" id="codeGroup">
-        <label>รหัสยืนยัน 6 หลัก</label>
+        <label data-en="6-digit code" data-th="รหัสยืนยัน 6 หลัก">6-digit code</label>
         <div class="input-row">
           <input type="text" id="codeInput" maxlength="6" placeholder="000000" inputmode="numeric" pattern="[0-9]*">
-          <button class="btn btn-sm btn-green" id="verifyCodeBtn" onclick="verifyCode()">ยืนยัน</button>
+          <button class="btn btn-sm btn-green" id="verifyCodeBtn" onclick="verifyCode()"><span data-en="Verify" data-th="ยืนยัน">Verify</span></button>
         </div>
       </div>
     </div>
 
     <!-- STEP 2: Form -->
     <div id="step2Content" style="display:none;">
-      <div class="channels-hint" id="verifySuccessMsg">
-        ✅ ยืนยันอีเมลเรียบร้อยแล้ว<br>
-        <strong>📝 ถ้าลงทะเบียนแล้ว — กรอกอีเมลเดิม ระบบจะอัปเดตข้อมูลให้อัตโนมัติ</strong>
+      <div class="channels-hint" style="background:#f8fafc;border-radius:8px;padding:10px 12px;font-size:12px;color:#16a34a;margin-bottom:16px;line-height:1.6;" id="verifySuccessMsg">
+        <span data-en="Email verified successfully" data-th="✅ ยืนยันอีเมลเรียบร้อยแล้ว">Email verified successfully</span>
       </div>
 
       <!-- Retrieved existing data -->
       <div class="retrieved-data" id="retrievedData">
-        <div class="rd-label">📋 ข้อมูลเดิมของคุณ</div>
+        <div class="rd-label">📋 <span data-en="Your existing information" data-th="ข้อมูลเดิมของคุณ">Your existing information</span></div>
         <div class="rd-row" id="rdContent"></div>
-        <div class="rd-edit-hint">✏️ แก้ไขข้อมูลด้านล่าง แล้วกดส่งเพื่ออัปเดต</div>
+        <div class="rd-edit-hint">✏️ <span data-en="Edit below and submit to update" data-th="แก้ไขข้อมูลด้านล่าง แล้วกดส่งเพื่ออัปเดต">Edit below and submit to update</span></div>
       </div>
 
       <form id="leadForm">
@@ -208,48 +237,63 @@
         <input type="hidden" name="customer_type" id="customerType" value="new">
 
         <div class="form-group">
-          <label>ชื่อ-นามสกุล <span class="optional">*</span></label>
-          <input type="text" name="name" id="fieldName" required placeholder="เช่น สมชาย ใจดี">
+          <label data-en="Full Name *" data-th="ชื่อ-นามสกุล *">Full Name *</label>
+          <input type="text" name="name" id="fieldName" required placeholder="e.g. John Smith">
         </div>
 
         <div class="form-group">
-          <label>เบอร์โทรศัพท์ <span class="optional">*</span></label>
-          <input type="tel" name="phone" id="fieldPhone" required placeholder="เช่น 0212345678">
+          <label data-en="Phone Number *" data-th="เบอร์โทรศัพท์ *">Phone Number *</label>
+          <input type="tel" name="phone" id="fieldPhone" required placeholder="e.g. 0212345678">
         </div>
 
         <div class="form-group">
-          <label>LINE ID <span class="optional">(optional)</span></label>
-          <input type="text" name="line_id" id="fieldLine" placeholder="LINE ID หรือเบอร์ที่ลงทะเบียน LINE">
+          <label data-en="LINE ID" data-th="LINE ID"><span data-en="LINE ID" data-th="LINE ID">LINE ID</span> <span class="optional">(optional)</span></label>
+          <input type="text" name="line_id" id="fieldLine" placeholder="LINE ID or registered phone">
         </div>
 
         <div class="form-group">
-          <label>Facebook Messenger <span class="optional">(optional)</span></label>
-          <input type="text" name="messenger_id" id="fieldFb" placeholder="ชื่อบัญชี Facebook">
+          <label data-en="Facebook Messenger" data-th="Facebook Messenger"><span data-en="Facebook Messenger" data-th="Facebook Messenger">Facebook Messenger</span> <span class="optional">(optional)</span></label>
+          <input type="text" name="messenger_id" id="fieldFb" placeholder="Facebook name or profile link">
         </div>
 
         <div class="form-group">
-          <label>WhatsApp <span class="optional">(optional)</span></label>
-          <input type="tel" name="whatsapp" id="fieldWa" placeholder="เบอร์ WhatsApp (รวมรหัสประเทศ)">
+          <label data-en="WhatsApp" data-th="WhatsApp">WhatsApp <span class="optional">(optional)</span></label>
+          <div class="input-row-3">
+            <select id="waCountryCode" name="wa_country_code">
+              <option value="64">🇳🇿 +64</option>
+              <option value="66">🇹🇭 +66</option>
+              <option value="1">🇺🇸 +1</option>
+              <option value="44">🇬🇧 +44</option>
+              <option value="61">🇦🇺 +61</option>
+              <option value="65">🇸🇬 +65</option>
+              <option value="852">🇭🇰 +852</option>
+              <option value="86">🇨🇳 +86</option>
+              <option value="81">🇯🇵 +81</option>
+              <option value="82">🇰🇷 +82</option>
+              <option value="other">🌐 +...</option>
+            </select>
+            <input type="tel" name="whatsapp" id="fieldWa" placeholder="phone number (no leading 0)">
+          </div>
         </div>
 
         <div class="form-group">
-          <label>หัวข้อที่ต้องการปรึกษา</label>
+          <label data-en="Topic *" data-th="หัวข้อที่ต้องการปรึกษา *">Topic *</label>
           <select name="topic" id="fieldTopic">
-            <option value="visa">ขอ Visa / ต่อ Visa</option>
-            <option value="residency">ถิ่นที่อยู่ (Residency)</option>
-            <option value="work">ใบอนุญาตทำงาน</option>
-            <option value="family">Family / Partner Visa</option>
-            <option value="other">อื่นๆ</option>
+            <option value="visa" data-en="Visa Application / Renewal" data-th="ขอ Visa / ต่อ Visa">Visa Application / Renewal</option>
+            <option value="residency" data-en="Residency" data-th="ถิ่นที่อยู่ (Residency)">Residency</option>
+            <option value="work" data-en="Work Permit" data-th="ใบอนุญาตทำงาน">Work Permit</option>
+            <option value="family" data-en="Family / Partner Visa" data-th="Family / Partner Visa">Family / Partner Visa</option>
+            <option value="other" data-en="Other" data-th="อื่นๆ">Other</option>
           </select>
         </div>
 
-        <button type="submit" class="btn btn-full" id="submitBtn">ส่งข้อมูล</button>
+        <button type="submit" class="btn btn-full" id="submitBtn"><span data-en="Submit" data-th="ส่งข้อมูล">Submit</span></button>
         <div class="error-msg" id="formError"></div>
       </form>
     </div>
 
     <div class="note">
-      ข้อมูลของคุณจะถูกเก็บเป็นความลับและใช้สำหรับการให้คำปรึกษาเท่านั้น
+      <span data-en="Your information is kept confidential and used only for consultation purposes." data-th="ข้อมูลของคุณจะถูกเก็บเป็นความลับและใช้สำหรับการให้คำปรึกษาเท่านั้น">Your information is kept confidential and used only for consultation purposes.</span>
     </div>
   </div>
 </div>
@@ -258,14 +302,37 @@
 <div class="card" id="successCard" style="display:none;">
   <div class="success" style="display:block;">
     <div class="check">✅</div>
-    <h2>Received!</h2>
-    <p>We have received your information and will get back to you soonest.<br>Thank you for choosing The Global Manpower</p>
+    <h2 data-en="Received!" data-th="ได้รับข้อมูลแล้ว!">Received!</h2>
+    <p data-en="We have received your information and will get back to you soonest. Thank you for choosing The Global Manpower" data-th="เราได้รับข้อมูลของคุณแล้ว และจะติดต่อกลับโดยเร็วที่สุด ขอบคุณที่ใช้บริการ The Global Manpower">We have received your information and will get back to you soonest.<br>Thank you for choosing The Global Manpower</p>
   </div>
 </div>
 
 <script>
 let verifiedEmail = '';
 let customerType = 'new';
+let currentLang = 'en';
+
+function switchLang(lang) {
+  currentLang = lang;
+  document.getElementById('langEn').className = 'lang-btn' + (lang === 'en' ? ' active' : '');
+  document.getElementById('langTh').className = 'lang-btn' + (lang === 'th' ? ' active' : '');
+
+  // Show/hide language content
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.style.display = el.dataset.lang === lang ? '' : 'none';
+  });
+
+  // Update data-en/data-th dynamic elements
+  document.querySelectorAll('[data-en][data-th]').forEach(el => {
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return;
+    if (el.dataset[lang]) el.innerHTML = el.dataset[lang];
+  });
+
+  // Update placeholder texts
+  document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+    el.placeholder = el.dataset[lang + 'Placeholder'];
+  });
+}
 
 function selectType(type) {
   customerType = type;
@@ -291,17 +358,22 @@ async function sendCode() {
   const email = document.getElementById('verifyEmail').value.trim();
   const btn = document.getElementById('sendCodeBtn');
   const status = document.getElementById('verifyStatus');
+  const errMsg = currentLang === 'en' ? 'Please enter a valid email' : 'กรุณากรอกอีเมลที่ถูกต้อง';
+  const sendingMsg = currentLang === 'en' ? 'Sending verification code to your email...' : 'กำลังส่งรหัสยืนยันไปยังอีเมล...';
+  const sentMsg = currentLang === 'en' ? 'Code sent! Please check your email' : '✅ ส่งรหัสไปยังอีเมลของคุณแล้ว';
+  const failMsg = currentLang === 'en' ? 'Failed to send code' : 'ส่งรหัสไม่สำเร็จ';
+  const errGeneric = currentLang === 'en' ? 'Error, please try again' : 'เกิดข้อผิดพลาด กรุณาลองใหม่';
 
   if (!email || !email.includes('@')) {
     status.className = 'verify-status verify-err';
-    status.textContent = 'กรุณากรอกอีเมลที่ถูกต้อง';
+    status.textContent = errMsg;
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = 'กำลังส่ง...';
+  btn.textContent = currentLang === 'en' ? 'Sending...' : 'กำลังส่ง...';
   status.className = 'verify-status verify-loading';
-  status.textContent = 'กำลังส่งรหัสยืนยันไปยังอีเมล...';
+  status.textContent = sendingMsg;
 
   try {
     const res = await fetch('/landing/send-code', {
@@ -313,23 +385,23 @@ async function sendCode() {
 
     if (res.ok) {
       status.className = 'verify-status verify-ok';
-      status.textContent = '✅ ส่งรหัสไปยังอีเมลของคุณแล้ว กรุณาตรวจสอบอีเมล';
+      status.textContent = '✅ ' + sentMsg;
       document.getElementById('codeGroup').style.display = 'block';
       document.getElementById('verifyEmail').readOnly = true;
-      btn.textContent = 'ส่งอีกครั้ง';
+      btn.textContent = currentLang === 'en' ? 'Resend' : 'ส่งอีกครั้ง';
       btn.disabled = false;
       document.getElementById('codeInput').focus();
     } else {
       status.className = 'verify-status verify-err';
-      status.textContent = '❌ ' + (data.error || 'ส่งรหัสไม่สำเร็จ');
+      status.textContent = '❌ ' + (data.error || failMsg);
       btn.disabled = false;
-      btn.textContent = 'ส่งรหัส';
+      btn.textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
     }
   } catch (err) {
     status.className = 'verify-status verify-err';
-    status.textContent = '❌ เกิดข้อผิดพลาด กรุณาลองใหม่';
+    status.textContent = '❌ ' + errGeneric;
     btn.disabled = false;
-    btn.textContent = 'ส่งรหัส';
+    btn.textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
   }
 }
 
@@ -338,17 +410,21 @@ async function verifyCode() {
   const code = document.getElementById('codeInput').value.trim();
   const btn = document.getElementById('verifyCodeBtn');
   const status = document.getElementById('verifyStatus');
+  const codeMsg = currentLang === 'en' ? 'Please enter the 6-digit code' : 'กรุณากรอกรหัสยืนยัน 6 หลัก';
+  const checkingMsg = currentLang === 'en' ? 'Verifying...' : 'กำลังตรวจสอบ...';
+  const failMsg = currentLang === 'en' ? 'Incorrect code' : 'รหัสไม่ถูกต้อง';
+  const errGeneric = currentLang === 'en' ? 'Error, please try again' : 'เกิดข้อผิดพลาด กรุณาลองใหม่';
 
   if (!code || code.length !== 6) {
     status.className = 'verify-status verify-err';
-    status.textContent = 'กรุณากรอกรหัสยืนยัน 6 หลัก';
+    status.textContent = codeMsg;
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = 'กำลังตรวจสอบ...';
+  btn.textContent = checkingMsg;
   status.className = 'verify-status verify-loading';
-  status.textContent = 'กำลังตรวจสอบรหัส...';
+  status.textContent = checkingMsg;
 
   try {
     const res = await fetch('/landing/verify-code', {
@@ -367,24 +443,21 @@ async function verifyCode() {
       document.getElementById('step2').className = 'step step-active';
       document.getElementById('step2').textContent = '2';
 
-      // If existing customer, retrieve their data
-      if (customerType === 'existing') {
-        await retrieveExistingData(email);
-      }
+      if (customerType === 'existing') await retrieveExistingData(email);
 
       document.getElementById('step1Content').style.display = 'none';
       document.getElementById('step2Content').style.display = 'block';
     } else {
       status.className = 'verify-status verify-err';
-      status.textContent = '❌ ' + (data.error || 'รหัสไม่ถูกต้อง');
+      status.textContent = '❌ ' + (data.error || failMsg);
       btn.disabled = false;
-      btn.textContent = 'ยืนยัน';
+      btn.textContent = currentLang === 'en' ? 'Verify' : 'ยืนยัน';
     }
   } catch (err) {
     status.className = 'verify-status verify-err';
-    status.textContent = '❌ เกิดข้อผิดพลาด กรุณาลองใหม่';
+    status.textContent = '❌ ' + errGeneric;
     btn.disabled = false;
-    btn.textContent = 'ยืนยัน';
+    btn.textContent = currentLang === 'en' ? 'Verify' : 'ยืนยัน';
   }
 }
 
@@ -398,44 +471,50 @@ async function retrieveExistingData(email) {
     const data = await res.json();
 
     if (res.ok && data.found) {
-      // Show retrieved data
       const rd = document.getElementById('retrievedData');
       const rc = document.getElementById('rdContent');
+      const en = currentLang === 'en';
       rc.innerHTML = '';
-      if (data.data.name) rc.innerHTML += '<span>ชื่อ:</span> ' + data.data.name + '<br>';
-      if (data.data.phone) rc.innerHTML += '<span>เบอร์:</span> ' + data.data.phone + '<br>';
+      if (data.data.name) rc.innerHTML += '<span>' + (en ? 'Name:' : 'ชื่อ:') + '</span> ' + data.data.name + '<br>';
+      if (data.data.phone) rc.innerHTML += '<span>' + (en ? 'Phone:' : 'เบอร์:') + '</span> ' + data.data.phone + '<br>';
       if (data.data.line_id) rc.innerHTML += '<span>LINE:</span> ' + data.data.line_id + '<br>';
       if (data.data.messenger_id) rc.innerHTML += '<span>FB:</span> ' + data.data.messenger_id + '<br>';
       if (data.data.whatsapp) rc.innerHTML += '<span>WA:</span> ' + data.data.whatsapp + '<br>';
       rd.style.display = 'block';
 
-      // Pre-fill form
       if (data.data.name) document.getElementById('fieldName').value = data.data.name;
       if (data.data.phone) document.getElementById('fieldPhone').value = data.data.phone;
       if (data.data.line_id) document.getElementById('fieldLine').value = data.data.line_id;
       if (data.data.messenger_id) document.getElementById('fieldFb').value = data.data.messenger_id;
       if (data.data.whatsapp) document.getElementById('fieldWa').value = data.data.whatsapp;
       if (data.data.topic) document.getElementById('fieldTopic').value = data.data.topic;
-    } else {
-      // Not found as existing - show as new customer
-      document.getElementById('verifySuccessMsg').innerHTML = '✅ ยืนยันอีเมลเรียบร้อยแล้ว<br><span style="color:#2563eb;">ไม่พบข้อมูลเดิมของคุณ กรุณากรอกข้อมูลด้านล่าง</span>';
     }
-  } catch (err) {
-    // Silently fail - just show form
-  }
+  } catch (err) {}
 }
 
+// Submit form - combine country code + phone number
 document.getElementById('leadForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
   const errEl = document.getElementById('formError');
   btn.disabled = true;
-  btn.textContent = 'กำลังส่ง...';
+  btn.textContent = currentLang === 'en' ? 'Submitting...' : 'กำลังส่ง...';
   errEl.style.display = 'none';
 
   const formData = new FormData(this);
   const data = Object.fromEntries(formData.entries());
   data.email = verifiedEmail;
+
+  // Combine country code + phone number for WhatsApp
+  const cc = document.getElementById('waCountryCode').value;
+  const waNum = document.getElementById('fieldWa').value.trim();
+  if (waNum) {
+    if (cc === 'other') {
+      data.whatsapp = waNum;
+    } else {
+      data.whatsapp = cc + waNum.replace(/^0+/, '');
+    }
+  }
 
   try {
     const res = await fetch('/landing/submit', {
@@ -443,16 +522,15 @@ document.getElementById('leadForm').addEventListener('submit', async function(e)
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-
-    if (!res.ok) throw new Error('ส่งข้อมูลไม่สำเร็จ');
+    if (!res.ok) throw new Error('Submit failed');
 
     document.getElementById('formCard').style.display = 'none';
     document.getElementById('successCard').style.display = 'block';
   } catch (err) {
-    errEl.textContent = 'เกิดข้อผิดพลาด: ' + err.message + ' กรุณาลองอีกครั้ง';
+    errEl.textContent = currentLang === 'en' ? 'Error: ' + err.message + '. Please try again.' : 'เกิดข้อผิดพลาด: ' + err.message + ' กรุณาลองอีกครั้ง';
     errEl.style.display = 'block';
     btn.disabled = false;
-    btn.textContent = 'ส่งข้อมูล';
+    btn.textContent = currentLang === 'en' ? 'Submit' : 'ส่งข้อมูล';
   }
 });
 
