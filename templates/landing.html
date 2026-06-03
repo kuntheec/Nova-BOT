@@ -372,7 +372,31 @@ async function sendCode() {
   }
 
   btn.disabled = true;
-  btn.textContent = currentLang === 'en' ? 'Sending...' : 'กำลังส่ง...';
+  btn.textContent = currentLang === 'en' ? 'Checking...' : 'กำลังตรวจสอบ...';
+  status.className = 'verify-status verify-loading';
+  status.textContent = currentLang === 'en' ? 'Checking email...' : 'กำลังตรวจสอบอีเมล...';
+
+  // For existing customers, check if email exists BEFORE sending code
+  if (customerType === 'existing') {
+    try {
+      const checkRes = await fetch('/landing/get-customer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const checkData = await checkRes.json();
+      if (!checkData.found) {
+        status.className = 'verify-status verify-err';
+        status.textContent = currentLang === 'en' ? 'You have not registered yet. Please select New Customer.' : 'คุณยังไม่ได้ลงทะเบียน กรุณาเลือก ลูกค้าใหม่';
+        btn.disabled = false;
+        btn.textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
+        return;
+      }
+    } catch (err) {
+      // If check fails, continue with sending code anyway
+    }
+  }
+
   status.className = 'verify-status verify-loading';
   status.textContent = sendingMsg;
 
