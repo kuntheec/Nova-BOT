@@ -23,154 +23,164 @@
     width: 100%;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   }
-  .logo {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .logo h1 {
-    font-size: 22px;
-    color: #1e293b;
-    margin-bottom: 4px;
-  }
-  .logo p {
-    font-size: 14px;
-    color: #64748b;
-  }
-  .form-group {
-    margin-bottom: 18px;
-  }
-  label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 6px;
-  }
-  label .optional {
-    font-weight: 400;
-    color: #94a3b8;
-    font-size: 12px;
-  }
+  .logo { text-align: center; margin-bottom: 24px; }
+  .logo h1 { font-size: 22px; color: #1e293b; margin-bottom: 4px; }
+  .logo p { font-size: 14px; color: #64748b; }
+  .form-group { margin-bottom: 18px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+  label .optional { font-weight: 400; color: #94a3b8; font-size: 12px; }
   input, select {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 15px;
-    transition: border-color 0.2s;
-    outline: none;
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid #e2e8f0; border-radius: 10px;
+    font-size: 15px; transition: border-color 0.2s; outline: none;
   }
-  input:focus, select:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
-  }
+  input:focus, select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+  .input-row { display: flex; gap: 8px; }
+  .input-row input { flex: 1; }
   .btn {
-    width: 100%;
-    padding: 14px;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 8px;
+    padding: 12px 20px; background: #2563eb; color: #fff;
+    border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background 0.2s; white-space: nowrap;
   }
   .btn:hover { background: #1d4ed8; }
   .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-sm { padding: 10px 16px; font-size: 13px; border-radius: 8px; }
+  .btn-green { background: #16a34a; }
+  .btn-green:hover { background: #15803d; }
+  .btn-full { width: 100%; padding: 14px; font-size: 16px; margin-top: 8px; }
+  .btn-gray { background: #64748b; }
+  .btn-gray:hover { background: #475569; }
+
+  .verify-status {
+    display: none; padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; margin-top: 8px;
+  }
+  .verify-ok { display: block; background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+  .verify-err { display: block; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .verify-loading { display: block; background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+  .step-indicator {
+    display: flex; gap: 8px; margin-bottom: 24px; justify-content: center;
+  }
+  .step {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .step-active { background: #2563eb; color: #fff; }
+  .step-done { background: #16a34a; color: #fff; }
+  .step-pending { background: #e2e8f0; color: #94a3b8; }
+  .step-line { width: 40px; height: 2px; align-self: center; background: #e2e8f0; }
+  .step-line-done { background: #16a34a; }
+
+  .locked { opacity: 0.5; pointer-events: none; }
+  .hidden-section { display: none; }
+
   .note {
-    font-size: 12px;
-    color: #64748b;
-    text-align: center;
-    margin-top: 20px;
-    line-height: 1.5;
+    font-size: 12px; color: #64748b; text-align: center; margin-top: 20px; line-height: 1.5;
   }
   .success {
-    display: none;
-    text-align: center;
-    padding: 30px 0;
+    display: none; text-align: center; padding: 30px 0;
   }
-  .success .check {
-    font-size: 48px;
-    margin-bottom: 12px;
-  }
+  .success .check { font-size: 48px; margin-bottom: 12px; }
   .success h2 { color: #16a34a; margin-bottom: 8px; }
   .success p { color: #64748b; font-size: 14px; line-height: 1.6; }
-  .error-msg {
-    display: none;
-    color: #dc2626;
-    font-size: 13px;
-    margin-top: 10px;
-    text-align: center;
-  }
+  .error-msg { display: none; color: #dc2626; font-size: 13px; margin-top: 10px; text-align: center; }
   .channels-hint {
-    background: #f8fafc;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 12px;
-    color: #64748b;
-    margin-bottom: 18px;
-    line-height: 1.6;
+    background: #f8fafc; border-radius: 8px; padding: 12px;
+    font-size: 12px; color: #64748b; margin-bottom: 18px; line-height: 1.6;
   }
 </style>
 </head>
 <body>
+
 <div class="card" id="formCard">
   <div class="logo">
-    <h1>🌏 The Global Manpower</h1>
+    <h1>The Global Manpower</h1>
     <p>Immigration Consultation — ลงทะเบียนรับคำปรึกษา</p>
   </div>
 
-  <div class="channels-hint">
-    กรุณากรอกข้อมูลที่ติดต่อได้สะดวก เพื่อให้เราสามารถติดต่อและส่งเอกสารกลับถึงคุณได้ทุกช่องทาง<br><strong>ถ้าลงทะเบียนแล้ว — กรอกอีเมลเดิม ระบบจะอัปเดตข้อมูลให้อัตโนมัติ</strong>
+  <!-- Step Indicator -->
+  <div class="step-indicator">
+    <div class="step step-active" id="step1">1</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step step-pending" id="step2">2</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step step-pending" id="step3">3</div>
   </div>
 
-  <form id="leadForm">
-    <div class="form-group">
-      <label>ชื่อ-นามสกุล <span class="optional">*</span></label>
-      <input type="text" name="name" required placeholder="เช่น สมชาย ใจดี">
-    </div>
+  <div id="errorTop" class="error-msg"></div>
 
-    <div class="form-group">
-      <label>เบอร์โทรศัพท์ <span class="optional">*</span></label>
-      <input type="tel" name="phone" required placeholder="เช่น 0212345678">
-    </div>
-
+  <!-- STEP 1: Email Verification -->
+  <div id="step1Content">
     <div class="form-group">
       <label>อีเมล <span class="optional">*</span></label>
-      <input type="email" name="email" required placeholder="your@email.com">
+      <div class="input-row">
+        <input type="email" id="verifyEmail" required placeholder="your@email.com">
+        <button class="btn btn-sm" id="sendCodeBtn" onclick="sendCode()">ส่งรหัส</button>
+      </div>
+    </div>
+    <div id="verifyStatus" class="verify-status"></div>
+
+    <div class="form-group" style="display:none;" id="codeGroup">
+      <label>รหัสยืนยัน 6 หลัก</label>
+      <div class="input-row">
+        <input type="text" id="codeInput" maxlength="6" placeholder="000000" inputmode="numeric" pattern="[0-9]*">
+        <button class="btn btn-sm btn-green" id="verifyCodeBtn" onclick="verifyCode()">ยืนยัน</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Personal Info -->
+  <div id="step2Content" style="display:none;">
+    <div class="channels-hint">
+      ✅ ยืนยันอีเมลเรียบร้อยแล้ว<br>
+      <strong>📝 ถ้าลงทะเบียนแล้ว — กรอกอีเมลเดิม ระบบจะอัปเดตข้อมูลให้อัตโนมัติ</strong>
     </div>
 
-    <div class="form-group">
-      <label>LINE ID <span class="optional">(optional)</span></label>
-      <input type="text" name="line_id" placeholder="LINE ID หรือเบอร์ที่ลงทะเบียน LINE">
-    </div>
+    <form id="leadForm">
+      <input type="hidden" name="email" id="hiddenEmail" value="">
 
-    <div class="form-group">
-      <label>Facebook Messenger <span class="optional">(optional)</span></label>
-      <input type="text" name="messenger_id" placeholder="ชื่อบัญชี Facebook หรือลิงก์โปรไฟล์">
-    </div>
+      <div class="form-group">
+        <label>ชื่อ-นามสกุล <span class="optional">*</span></label>
+        <input type="text" name="name" required placeholder="เช่น สมชาย ใจดี">
+      </div>
 
-    <div class="form-group">
-      <label>WhatsApp <span class="optional">(optional)</span></label>
-      <input type="tel" name="whatsapp" placeholder="เบอร์ WhatsApp (รวมรหัสประเทศ)">
-    </div>
+      <div class="form-group">
+        <label>เบอร์โทรศัพท์ <span class="optional">*</span></label>
+        <input type="tel" name="phone" required placeholder="เช่น 0212345678">
+      </div>
 
-    <div class="form-group">
-      <label>หัวข้อที่ต้องการปรึกษา</label>
-      <select name="topic">
-        <option value="visa">ขอ Visa / ต่อ Visa</option>
-        <option value="residency">ถิ่นที่อยู่ (Residency)</option>
-        <option value="work">ใบอนุญาตทำงาน</option>
-        <option value="family">Family / Partner Visa</option>
-        <option value="other">อื่นๆ</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label>LINE ID <span class="optional">(optional)</span></label>
+        <input type="text" name="line_id" placeholder="LINE ID หรือเบอร์ที่ลงทะเบียน LINE">
+      </div>
 
-    <button type="submit" class="btn" id="submitBtn">ส่งข้อมูล</button>
-    <div class="error-msg" id="errorMsg"></div>
-  </form>
+      <div class="form-group">
+        <label>Facebook Messenger <span class="optional">(optional)</span></label>
+        <input type="text" name="messenger_id" placeholder="ชื่อบัญชี Facebook">
+      </div>
+
+      <div class="form-group">
+        <label>WhatsApp <span class="optional">(optional)</span></label>
+        <input type="tel" name="whatsapp" placeholder="เบอร์ WhatsApp (รวมรหัสประเทศ)">
+      </div>
+
+      <div class="form-group">
+        <label>หัวข้อที่ต้องการปรึกษา</label>
+        <select name="topic">
+          <option value="visa">ขอ Visa / ต่อ Visa</option>
+          <option value="residency">ถิ่นที่อยู่ (Residency)</option>
+          <option value="work">ใบอนุญาตทำงาน</option>
+          <option value="family">Family / Partner Visa</option>
+          <option value="other">อื่นๆ</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-full" id="submitBtn">ส่งข้อมูล</button>
+      <div class="error-msg" id="formError"></div>
+    </form>
+  </div>
 
   <div class="note">
     ข้อมูลของคุณจะถูกเก็บเป็นความลับและใช้สำหรับการให้คำปรึกษาเท่านั้น
@@ -179,7 +189,7 @@
 
 <!-- Success Screen -->
 <div class="card" id="successCard" style="display:none;">
-  <div class="success">
+  <div class="success" style="display:block;">
     <div class="check">✅</div>
     <h2>ส่งข้อมูลสำเร็จ!</h2>
     <p>เราจะติดต่อกลับโดยเร็วที่สุดทางช่องทางที่คุณเลือกไว้<br>ขอบคุณที่ใช้บริการ The Global Manpower</p>
@@ -187,16 +197,114 @@
 </div>
 
 <script>
+let verifiedEmail = '';
+
+async function sendCode() {
+  const email = document.getElementById('verifyEmail').value.trim();
+  const btn = document.getElementById('sendCodeBtn');
+  const status = document.getElementById('verifyStatus');
+
+  if (!email || !email.includes('@')) {
+    status.className = 'verify-status verify-err';
+    status.textContent = 'กรุณากรอกอีเมลที่ถูกต้อง';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'กำลังส่ง...';
+  status.className = 'verify-status verify-loading';
+  status.textContent = 'กำลังส่งรหัสยืนยันไปยังอีเมล...';
+
+  try {
+    const res = await fetch('/landing/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      status.className = 'verify-status verify-ok';
+      status.textContent = '✅ ส่งรหัสไปยังอีเมลของคุณแล้ว กรุณาตรวจสอบอีเมล';
+      document.getElementById('codeGroup').style.display = 'block';
+      document.getElementById('verifyEmail').readOnly = true;
+      btn.textContent = 'ส่งอีกครั้ง';
+      btn.disabled = false;
+      document.getElementById('codeInput').focus();
+    } else {
+      status.className = 'verify-status verify-err';
+      status.textContent = '❌ ' + (data.error || 'ส่งรหัสไม่สำเร็จ');
+      btn.disabled = false;
+      btn.textContent = 'ส่งรหัส';
+    }
+  } catch (err) {
+    status.className = 'verify-status verify-err';
+    status.textContent = '❌ เกิดข้อผิดพลาด กรุณาลองใหม่';
+    btn.disabled = false;
+    btn.textContent = 'ส่งรหัส';
+  }
+}
+
+async function verifyCode() {
+  const email = document.getElementById('verifyEmail').value.trim();
+  const code = document.getElementById('codeInput').value.trim();
+  const btn = document.getElementById('verifyCodeBtn');
+  const status = document.getElementById('verifyStatus');
+
+  if (!code || code.length !== 6) {
+    status.className = 'verify-status verify-err';
+    status.textContent = 'กรุณากรอกรหัสยืนยัน 6 หลัก';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'กำลังตรวจสอบ...';
+  status.className = 'verify-status verify-loading';
+  status.textContent = 'กำลังตรวจสอบรหัส...';
+
+  try {
+    const res = await fetch('/landing/verify-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      verifiedEmail = email;
+      document.getElementById('hiddenEmail').value = email;
+      document.getElementById('step1').className = 'step step-done';
+      document.getElementById('step1').textContent = '✓';
+      document.getElementById('line1').className = 'step-line step-line-done';
+      document.getElementById('step2').className = 'step step-active';
+      document.getElementById('step2').textContent = '2';
+      document.getElementById('step1Content').style.display = 'none';
+      document.getElementById('step2Content').style.display = 'block';
+    } else {
+      status.className = 'verify-status verify-err';
+      status.textContent = '❌ ' + (data.error || 'รหัสไม่ถูกต้อง');
+      btn.disabled = false;
+      btn.textContent = 'ยืนยัน';
+    }
+  } catch (err) {
+    status.className = 'verify-status verify-err';
+    status.textContent = '❌ เกิดข้อผิดพลาด กรุณาลองใหม่';
+    btn.disabled = false;
+    btn.textContent = 'ยืนยัน';
+  }
+}
+
 document.getElementById('leadForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
-  const errEl = document.getElementById('errorMsg');
+  const errEl = document.getElementById('formError');
   btn.disabled = true;
   btn.textContent = 'กำลังส่ง...';
   errEl.style.display = 'none';
 
   const formData = new FormData(this);
   const data = Object.fromEntries(formData.entries());
+  data.email = verifiedEmail;
 
   try {
     const res = await fetch('/landing/submit', {
@@ -218,6 +326,18 @@ document.getElementById('leadForm').addEventListener('submit', async function(e)
     btn.disabled = false;
     btn.textContent = 'ส่งข้อมูล';
   }
+});
+
+// Enter key triggers next step
+document.getElementById('verifyEmail').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); sendCode(); }
+});
+document.getElementById('codeInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { e.preventDefault(); verifyCode(); }
+});
+// Auto-submit when 6 digits entered
+document.getElementById('codeInput').addEventListener('input', function() {
+  if (this.value.length === 6) verifyCode();
 });
 </script>
 </body>
