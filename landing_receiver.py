@@ -40,6 +40,34 @@ def generate_code(email):
     save_codes(codes)
     return code
 
+def get_customer_by_email(email):
+    """Retrieve existing customer data by email"""
+    leads = load_leads()
+    for lead in leads:
+        if lead.get("email", "").lower() == email.lower():
+            return lead
+    # Also check Customer DB
+    try:
+        cdb_path = r"D:\ImmigrationCases\_Customers.json"
+        if os.path.exists(cdb_path):
+            with open(cdb_path, "r", encoding="utf-8") as f:
+                db = json.load(f)
+            for c in db.get("customers", []):
+                if c.get("profile", {}).get("email", "").lower() == email.lower():
+                    return {
+                        "name": c["profile"]["name"],
+                        "phone": c["profile"]["phone"],
+                        "email": c["profile"]["email"],
+                        "line_id": "",
+                        "messenger_id": c["channels"].get("messenger", ""),
+                        "whatsapp": c["channels"].get("whatsapp", ""),
+                        "topic": ""
+                    }
+    except:
+        pass
+    return None
+
+
 def verify_code(email, user_code):
     """Check if code is valid and not expired"""
     codes = load_codes()
@@ -205,6 +233,17 @@ tgm.kuntheec@gmail.com
                 self._json_response(200, {"status": "sent", "message": "ส่งรหัสยืนยันไปยังอีเมลของคุณแล้ว"})
             else:
                 self._json_response(500, {"error": "ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง"})
+
+        elif path in ("/get-customer", "/landing/get-customer"):
+            email = data.get("email", "")
+            if not email:
+                self._json_response(400, {"error": "กรุณากรอกอีเมล", "found": False})
+                return
+            customer = get_customer_by_email(email)
+            if customer:
+                self._json_response(200, {"found": True, "data": customer})
+            else:
+                self._json_response(200, {"found": False, "data": {}})
 
         elif path in ("/verify-code", "/landing/verify-code"):
             email = data.get("email", "")
