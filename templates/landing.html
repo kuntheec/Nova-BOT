@@ -161,6 +161,7 @@
     </div>
   </div>
 
+  <div data-lang="en">
   <!-- Company Contact Info -->
   <div class="company-links">
     <div class="label" data-en="Contact us instantly via:" data-th="ติดต่อเราทันทีผ่าน:">Contact us instantly via:</div>
@@ -171,7 +172,9 @@
     </div>
   </div>
 
-  <!-- Customer Type Selection -->
+    </div>
+
+<!-- Customer Type Selection -->
   <div class="option-row" id="typeSelection">
     <div class="option-card option-new" onclick="selectType('new')">
       <div class="icon">🆕</div>
@@ -510,7 +513,6 @@ async function retrieveExistingData(email) {
     const data = await res.json();
 
     if (res.ok && data.found) {
-      return true;
       const rd = document.getElementById('retrievedData');
       const rc = document.getElementById('rdContent');
       const en = currentLang === 'en';
@@ -528,10 +530,12 @@ async function retrieveExistingData(email) {
       if (data.data.messenger_id) document.getElementById('fieldFb').value = data.data.messenger_id;
       if (data.data.whatsapp) document.getElementById('fieldWa').value = data.data.whatsapp;
       if (data.data.topic) document.getElementById('fieldTopic').value = data.data.topic;
+      return true;
     }
   } catch (err) {}
   return false;
 }
+
 
 // Submit form - combine country code + phone number
 document.getElementById('leadForm').addEventListener('submit', async function(e) {
