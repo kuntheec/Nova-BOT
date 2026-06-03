@@ -444,7 +444,21 @@ async function verifyCode() {
       document.getElementById('step2').className = 'step step-active';
       document.getElementById('step2').textContent = '2';
 
-      if (customerType === 'existing') await retrieveExistingData(email);
+      if (customerType === 'existing') {
+        const found = await retrieveExistingData(email);
+        if (!found) {
+          // Email not found in system - show error and go back
+          const status = document.getElementById('verifyStatus');
+          status.className = 'verify-status verify-err';
+          status.textContent = currentLang === 'en' ? 'Email not found in our system. Please select New Customer.' : 'ไม่พบอีเมลนี้ในระบบ กรุณาเลือก ลูกค้าใหม่';
+          document.getElementById('codeGroup').style.display = 'none';
+          document.getElementById('verifyEmail').readOnly = false;
+          document.getElementById('sendCodeBtn').disabled = false;
+          document.getElementById('sendCodeBtn').textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
+          document.getElementById('step1').className = 'step step-active';
+          return;
+        }
+      }
 
       document.getElementById('step1Content').style.display = 'none';
       document.getElementById('step2Content').style.display = 'block';
@@ -472,6 +486,7 @@ async function retrieveExistingData(email) {
     const data = await res.json();
 
     if (res.ok && data.found) {
+      return true;
       const rd = document.getElementById('retrievedData');
       const rc = document.getElementById('rdContent');
       const en = currentLang === 'en';
@@ -491,6 +506,7 @@ async function retrieveExistingData(email) {
       if (data.data.topic) document.getElementById('fieldTopic').value = data.data.topic;
     }
   } catch (err) {}
+  return false;
 }
 
 // Submit form - combine country code + phone number
