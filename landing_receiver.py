@@ -145,12 +145,13 @@ def add_or_update_customer(data):
         "topic": data.get("topic", ""),
         "email_verified": True,
         "source": "landing_page",
+        "customer_type": data.get("customer_type", "new"),
         "submitted_at": datetime.datetime.now().isoformat()
     }
 
     existing = None
     for lead in leads:
-        if lead.get("email") == entry["email"]:
+        if lead.get("email", "").lower().strip() == entry["email"].lower().strip():
             existing = lead
             break
 
