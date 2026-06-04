@@ -340,7 +340,7 @@ def generate_code(email):
     code = str(random.randint(100000, 999999))
     codes[email] = {
         "code": code,
-        "expires": (datetime.datetime.now() + datetime.timedelta(minutes=20)).isoformat()
+        "expires": (datetime.datetime.now() + datetime.timedelta(minutes=2)).isoformat()
     }
     save_codes(codes)
     return code
@@ -372,7 +372,7 @@ def send_email(to_email, subject, body):
         token_file = r"D:\OpenClawData\.openclaw\gmail\tokens\biz.pickle"
         if not os.path.exists(token_file):
             print(f"[EMAIL] Token not found: {token_file}")
-            return True
+            return False
 
         with open(token_file, "rb") as f:
             creds = pickle.load(f)
@@ -430,7 +430,7 @@ class LandingHandler(BaseHTTPRequestHandler):
 
 รหัสยืนยันอีเมลของคุณคือ: {code}
 
-รหัสนี้มีอายุ 10 นาที
+รหัสนี้มีอายุ 2 นาที
 หากคุณไม่ได้ขอรหัสยืนยัน กรุณาละเว้นอีเมลนี้
 
 —
