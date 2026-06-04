@@ -438,6 +438,7 @@ The Global Manpower Immigration Services
 tgm.kuntheec@gmail.com
 """
             sent = send_email(email, subject, body_text)
+            print(f"[DEBUG] send_email returned: {sent} (type: {type(sent)})")  # ← เพิ่มบรรทัดนี้
             if sent:
                 self._json_response(200, {"status": "sent", "message": "ส่งรหัสยืนยันไปยังอีเมลของคุณแล้ว"})
             else:
