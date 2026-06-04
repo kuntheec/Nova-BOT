@@ -17,7 +17,7 @@
   }
   .card {
     background: #fff; border-radius: 16px; padding: 40px;
-    max-width: 520px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 560px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     position: relative;
   }
   .lang-switch {
@@ -31,19 +31,19 @@
   .lang-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
   .lang-btn:hover:not(.active) { background: #f1f5f9; }
 
-  .logo { text-align: center; margin-bottom: 20px; }
+  .logo { text-align: center; margin-bottom: 16px; }
   .logo h1 { font-size: 22px; color: #1e293b; margin-bottom: 4px; }
   .logo p { font-size: 14px; color: #64748b; }
 
   .company-links {
-    background: #f8fafc; border-radius: 12px; padding: 14px 16px;
-    margin-bottom: 20px;
+    background: #f8fafc; border-radius: 12px; padding: 12px 16px;
+    margin-bottom: 16px;
   }
-  .company-links .label { font-size: 11px; color: #64748b; margin-bottom: 8px; text-align: center; font-weight: 500; }
+  .company-links .label { font-size: 11px; color: #64748b; margin-bottom: 6px; text-align: center; font-weight: 500; }
   .company-links .links { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .company-links .link-btn {
     display: inline-flex; align-items: center; gap: 4px;
-    padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 500;
+    padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 500;
     text-decoration: none; transition: all 0.2s;
   }
   .link-btn-line { background: #e8f5e9; color: #06c755; }
@@ -53,14 +53,14 @@
   .link-btn-wa { background: #e8f5e9; color: #25d366; }
   .link-btn-wa:hover { background: #25d366; color: #fff; }
 
-  .option-row { display: flex; gap: 14px; margin-bottom: 20px; }
+  .option-row { display: flex; gap: 14px; margin-bottom: 16px; }
   .option-card {
-    flex: 1; padding: 22px 14px; border-radius: 14px;
+    flex: 1; padding: 20px 14px; border-radius: 14px;
     text-align: center; cursor: pointer; transition: all 0.2s;
     border: 2px solid #e2e8f0;
   }
   .option-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-  .option-card .icon { font-size: 32px; margin-bottom: 6px; }
+  .option-card .icon { font-size: 28px; margin-bottom: 6px; }
   .option-card .title { font-size: 14px; font-weight: 600; }
   .option-card .desc { font-size: 11px; color: #64748b; margin-top: 3px; }
   .option-new { background: #eff6ff; border-color: #93c5fd; }
@@ -70,11 +70,11 @@
   .option-existing:hover { border-color: #22c55e; background: #dcfce7; }
   .option-existing.selected { border-color: #16a34a; background: #bbf7d0; }
 
-  .form-group { margin-bottom: 16px; }
-  label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 5px; }
+  .form-group { margin-bottom: 14px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 4px; }
   label .optional { font-weight: 400; color: #94a3b8; font-size: 11px; }
   input, select {
-    width: 100%; padding: 11px 14px;
+    width: 100%; padding: 10px 14px;
     border: 1.5px solid #e2e8f0; border-radius: 10px;
     font-size: 14px; transition: border-color 0.2s; outline: none;
   }
@@ -86,53 +86,88 @@
   .input-row-3 input { flex: 1; }
 
   .btn {
-    padding: 11px 18px; background: #2563eb; color: #fff;
+    padding: 10px 16px; background: #2563eb; color: #fff;
     border: none; border-radius: 10px; font-size: 13px; font-weight: 600;
     cursor: pointer; transition: background 0.2s; white-space: nowrap;
   }
   .btn:hover { background: #1d4ed8; }
   .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .btn-sm { padding: 9px 14px; font-size: 12px; border-radius: 8px; }
+  .btn-sm { padding: 8px 12px; font-size: 12px; border-radius: 8px; }
   .btn-green { background: #16a34a; }
   .btn-green:hover { background: #15803d; }
-  .btn-full { width: 100%; padding: 13px; font-size: 15px; margin-top: 6px; }
+  .btn-outline {
+    background: #fff; border: 1.5px solid #2563eb; color: #2563eb; font-weight: 600;
+  }
+  .btn-outline:hover { background: #eff6ff; }
+  .btn-danger { background: #dc2626; }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-full { width: 100%; padding: 13px; font-size: 15px; margin-top: 4px; }
   .btn-back {
     background: none; border: 1px solid #e2e8f0; color: #64748b;
     padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 12px;
-    margin-bottom: 14px; transition: all 0.2s;
+    margin-bottom: 12px; transition: all 0.2s;
   }
   .btn-back:hover { background: #f1f5f9; }
 
-  .verify-status { display: none; padding: 9px 12px; border-radius: 8px; font-size: 12px; margin-top: 8px; }
+  .verify-status { display: none; padding: 9px 12px; border-radius: 8px; font-size: 12px; margin-top: 6px; }
   .verify-ok { display: block; background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
   .verify-err { display: block; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
   .verify-loading { display: block; background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
 
-  .step-indicator { display: flex; gap: 8px; margin-bottom: 20px; justify-content: center; }
-  .step { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+  .step-indicator { display: flex; gap: 8px; margin-bottom: 16px; justify-content: center; }
+  .step { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; }
   .step-active { background: #2563eb; color: #fff; }
   .step-done { background: #16a34a; color: #fff; }
   .step-pending { background: #e2e8f0; color: #94a3b8; }
-  .step-line { width: 36px; height: 2px; align-self: center; background: #e2e8f0; }
+  .step-line { width: 32px; height: 2px; align-self: center; background: #e2e8f0; }
   .step-line-done { background: #16a34a; }
 
-  .note { font-size: 11px; color: #64748b; text-align: center; margin-top: 18px; line-height: 1.5; }
+  /* Family Member Section */
+  .family-section { margin-top: 16px; }
+  .family-section h3 { font-size: 14px; color: #1e293b; margin-bottom: 8px; }
+  .family-member-card {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 8px; display: flex;
+    justify-content: space-between; align-items: center;
+    transition: all 0.2s;
+  }
+  .family-member-card:hover { border-color: #93c5fd; }
+  .family-member-card .fm-info { flex: 1; }
+  .family-member-card .fm-name { font-size: 14px; font-weight: 600; color: #1e293b; }
+  .family-member-card .fm-detail { font-size: 11px; color: #64748b; margin-top: 2px; }
+  .family-member-card .fm-actions { display: flex; gap: 4px; }
+  .family-member-card .fm-badge {
+    display: inline-block; padding: 1px 6px; border-radius: 4px;
+    font-size: 10px; font-weight: 600; margin-left: 4px;
+    background: #dbeafe; color: #1d4ed8;
+  }
+  .family-member-card .fm-badge-self { background: #dcfce7; color: #16a34a; }
+  .btn-fm-add {
+    width: 100%; padding: 10px; border: 1.5px dashed #93c5fd; border-radius: 10px;
+    background: #eff6ff; color: #2563eb; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; margin-bottom: 8px;
+  }
+  .btn-fm-add:hover { background: #dbeafe; border-style: solid; }
+  .family-form { display: none; margin-top: 8px; }
+  .family-form.active { display: block; }
+
+  .note { font-size: 11px; color: #64748b; text-align: center; margin-top: 14px; line-height: 1.5; }
   .success { display: none; text-align: center; padding: 30px 0; }
-  .success .check { font-size: 48px; margin-bottom: 12px; }
-  .success h2 { color: #16a34a; margin-bottom: 8px; }
+  .success .check { font-size: 48px; margin-bottom: 10px; }
+  .success h2 { color: #16a34a; margin-bottom: 6px; }
   .success p { color: #64748b; font-size: 14px; line-height: 1.6; }
-  .error-msg { display: none; color: #dc2626; font-size: 12px; margin-top: 8px; text-align: center; }
+  .error-msg { display: none; color: #dc2626; font-size: 12px; margin-top: 6px; text-align: center; }
 
   .retrieved-data {
     background: #f8fafc; border-radius: 10px; padding: 14px;
-    margin-bottom: 16px; display: none;
+    margin-bottom: 14px; display: none;
   }
-  .retrieved-data .rd-label { font-size: 11px; color: #2563eb; font-weight: 600; margin-bottom: 6px; }
+  .retrieved-data .rd-label { font-size: 11px; color: #2563eb; font-weight: 600; margin-bottom: 4px; }
   .retrieved-data .rd-row { font-size: 12px; color: #334155; line-height: 1.8; }
   .retrieved-data .rd-row span { color: #64748b; }
   .retrieved-data .rd-edit-hint {
-    font-size: 11px; color: #16a34a; margin-top: 6px;
-    padding-top: 6px; border-top: 1px solid #e2e8f0;
+    font-size: 11px; color: #16a34a; margin-top: 4px;
+    padding-top: 4px; border-top: 1px solid #e2e8f0;
   }
   [data-lang="th"] { display: none; }
 </style>
@@ -219,11 +254,14 @@
       </div>
     </div>
 
-    <!-- STEP 2: Form -->
+    <!-- STEP 2: Form + Family Members -->
     <div id="step2Content" style="display:none;">
-      <div class="channels-hint" style="background:#f8fafc;border-radius:8px;padding:10px 12px;font-size:12px;color:#16a34a;margin-bottom:16px;line-height:1.6;" id="verifySuccessMsg">
-        <span data-en="Email verified successfully" data-th="✅ ยืนยันอีเมลเรียบร้อยแล้ว">Email verified successfully</span>
+      <div class="channels-hint" style="background:#f8fafc;border-radius:8px;padding:10px 12px;font-size:12px;color:#16a34a;margin-bottom:12px;line-height:1.6;" id="verifySuccessMsg">
+        <span data-en="✅ Email verified successfully" data-th="✅ ยืนยันอีเมลเรียบร้อยแล้ว">✅ Email verified successfully</span>
       </div>
+
+      <!-- Customer/Individual ID display -->
+      <div id="idDisplay" style="display:none;background:#f0fdf4;border-radius:8px;padding:8px 12px;font-size:11px;color:#16a34a;margin-bottom:10px;text-align:center;"></div>
 
       <!-- Retrieved existing data -->
       <div class="retrieved-data" id="retrievedData">
@@ -235,6 +273,9 @@
       <form id="leadForm">
         <input type="hidden" name="email" id="hiddenEmail" value="">
         <input type="hidden" name="customer_type" id="customerType" value="new">
+        <!-- individual_id is empty for new, set for editing existing -->
+        <input type="hidden" name="individual_id" id="hiddenIndividualId" value="">
+        <input type="hidden" name="relationship" id="hiddenRelationship" value="self">
 
         <div class="form-group">
           <label data-en="Full Name *" data-th="ชื่อ-นามสกุล *">Full Name *</label>
@@ -291,6 +332,56 @@
         <button type="submit" class="btn btn-full" id="submitBtn"><span data-en="Submit" data-th="ส่งข้อมูล">Submit</span></button>
         <div class="error-msg" id="formError"></div>
       </form>
+
+      <!-- Family Member Section -->
+      <div class="family-section" id="familySection" style="display:none;border-top:1px solid #e2e8f0;padding-top:14px;margin-top:14px;">
+        <h3 data-en="👨‍👩‍👧‍👦 Family Members" data-th="👨‍👩‍👧‍👦 สมาชิกในครอบครัว">👨‍👩‍👧‍👦 Family Members</h3>
+        <div id="familyList"></div>
+        <button class="btn-fm-add" id="addFamilyBtn" onclick="showAddFamily()">
+          <span data-en="+ Add Family Member" data-th="+ เพิ่มสมาชิกในครอบครัว">+ Add Family Member</span>
+        </button>
+
+        <!-- Family Member Form -->
+        <div class="family-form" id="familyForm">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-size:13px;font-weight:600;color:#1e293b" id="familyFormTitle">
+              <span data-en="Family Member Details" data-th="ข้อมูลสมาชิก">Family Member Details</span>
+            </span>
+            <button class="btn btn-sm btn-danger" onclick="hideAddFamily()" style="font-size:10px;padding:4px 8px;">
+              <span data-en="Cancel" data-th="ยกเลิก">✕</span>
+            </button>
+          </div>
+          <div class="form-group">
+            <label data-en="Full Name *" data-th="ชื่อ-นามสกุล *">Full Name *</label>
+            <input type="text" id="fmName" placeholder="e.g. Jane Smith">
+          </div>
+          <div class="form-group">
+            <label data-en="Relationship *" data-th="ความสัมพันธ์ *">Relationship *</label>
+            <select id="fmRelationship">
+              <option value="spouse"><span data-en="Spouse" data-th="คู่สมรส">Spouse</span></option>
+              <option value="child"><span data-en="Child" data-th="บุตร">Child</span></option>
+              <option value="parent"><span data-en="Parent" data-th="บิดา/มารดา">Parent</span></option>
+              <option value="sibling"><span data-en="Sibling" data-th="พี่/น้อง">Sibling</span></option>
+              <option value="other"><span data-en="Other" data-th="อื่นๆ">Other</span></option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label data-en="Topic *" data-th="หัวข้อ *">Topic *</label>
+            <select id="fmTopic">
+              <option value="visitor" data-en="Visitor Visa" data-th="วีซ่าท่องเที่ยว">Visitor Visa</option>
+              <option value="student" data-en="Student Visa" data-th="วีซ่านักเรียน">Student Visa</option>
+              <option value="work" data-en="Work Visa / Work Permit" data-th="วีซ่าทำงาน / ใบอนุญาตทำงาน">Work Visa / Work Permit</option>
+              <option value="residency" data-en="Residency" data-th="ถิ่นที่อยู่ (Residency)">Residency</option>
+              <option value="family" data-en="Family / Partner Visa" data-th="Family / Partner Visa">Family / Partner Visa</option>
+              <option value="other" data-en="Other" data-th="อื่นๆ">Other</option>
+            </select>
+          </div>
+          <button class="btn btn-full" onclick="addFamilyMember()">
+            <span data-en="Add Family Member" data-th="เพิ่มสมาชิก">Add Family Member</span>
+          </button>
+          <div class="error-msg" id="fmError"></div>
+        </div>
+      </div>
     </div>
 
     <div class="note">
@@ -312,6 +403,8 @@
 let verifiedEmail = '';
 let customerType = 'new';
 let currentLang = 'en';
+let customerData = null;  // Full customer info from API
+let currentlyEditingIndividual = null;
 
 function switchLang(lang) {
   currentLang = lang;
@@ -323,15 +416,10 @@ function switchLang(lang) {
     el.style.display = el.dataset.lang === lang ? '' : 'none';
   });
 
-  // Update data-en/data-th dynamic elements
+  // Update text elements
   document.querySelectorAll('[data-en][data-th]').forEach(el => {
     if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return;
     if (el.dataset[lang]) el.innerHTML = el.dataset[lang];
-  });
-
-  // Update placeholder texts
-  document.querySelectorAll('[data-en-placeholder]').forEach(el => {
-    el.placeholder = el.dataset[lang + 'Placeholder'];
   });
 }
 
@@ -345,6 +433,11 @@ function selectType(type) {
 function backToType() {
   document.getElementById('verifySection').style.display = 'none';
   document.getElementById('typeSelection').style.display = 'flex';
+  resetToStep1();
+  hideFamilySection();
+}
+
+function resetToStep1() {
   document.getElementById('step1Content').style.display = 'block';
   document.getElementById('step2Content').style.display = 'none';
   document.getElementById('codeGroup').style.display = 'none';
@@ -353,21 +446,27 @@ function backToType() {
   document.getElementById('verifyEmail').readOnly = false;
   document.getElementById('step1').className = 'step step-active';
   document.getElementById('line1').className = 'step-line';
+  customerData = null;
+  currentlyEditingIndividual = null;
+  document.getElementById('hiddenIndividualId').value = '';
+}
+
+function showFamilySection() {
+  document.getElementById('familySection').style.display = 'block';
+}
+
+function hideFamilySection() {
+  document.getElementById('familySection').style.display = 'none';
 }
 
 async function sendCode() {
   const email = document.getElementById('verifyEmail').value.trim();
   const btn = document.getElementById('sendCodeBtn');
   const status = document.getElementById('verifyStatus');
-  const errMsg = currentLang === 'en' ? 'Please enter a valid email' : 'กรุณากรอกอีเมลที่ถูกต้อง';
-  const sendingMsg = currentLang === 'en' ? 'Sending verification code to your email...' : 'กำลังส่งรหัสยืนยันไปยังอีเมล...';
-  const sentMsg = currentLang === 'en' ? 'Code sent! Please check your email' : '✅ ส่งรหัสไปยังอีเมลของคุณแล้ว';
-  const failMsg = currentLang === 'en' ? 'Failed to send code' : 'ส่งรหัสไม่สำเร็จ';
-  const errGeneric = currentLang === 'en' ? 'Error, please try again' : 'เกิดข้อผิดพลาด กรุณาลองใหม่';
 
   if (!email || !email.includes('@')) {
     status.className = 'verify-status verify-err';
-    status.textContent = errMsg;
+    status.textContent = currentLang === 'en' ? 'Please enter a valid email' : 'กรุณากรอกอีเมลที่ถูกต้อง';
     return;
   }
 
@@ -392,13 +491,15 @@ async function sendCode() {
         btn.textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
         return;
       }
+      // Store customer data for later
+      customerData = checkData.data;
     } catch (err) {
-      // If check fails, continue with sending code anyway
+      // Continue anyway
     }
   }
 
   status.className = 'verify-status verify-loading';
-  status.textContent = sendingMsg;
+  status.textContent = currentLang === 'en' ? 'Sending verification code to your email...' : 'กำลังส่งรหัสยืนยันไปยังอีเมล...';
 
   try {
     const res = await fetch('/landing/send-code', {
@@ -410,7 +511,7 @@ async function sendCode() {
 
     if (res.ok) {
       status.className = 'verify-status verify-ok';
-      status.textContent = '✅ ' + sentMsg;
+      status.textContent = '✅ ' + (currentLang === 'en' ? 'Code sent! Please check your email' : 'ส่งรหัสไปยังอีเมลของคุณแล้ว');
       document.getElementById('codeGroup').style.display = 'block';
       document.getElementById('verifyEmail').readOnly = true;
       btn.textContent = currentLang === 'en' ? 'Resend' : 'ส่งอีกครั้ง';
@@ -418,13 +519,13 @@ async function sendCode() {
       document.getElementById('codeInput').focus();
     } else {
       status.className = 'verify-status verify-err';
-      status.textContent = '❌ ' + (data.error || failMsg);
+      status.textContent = '❌ ' + (data.error || (currentLang === 'en' ? 'Failed to send code' : 'ส่งรหัสไม่สำเร็จ'));
       btn.disabled = false;
       btn.textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
     }
   } catch (err) {
     status.className = 'verify-status verify-err';
-    status.textContent = '❌ ' + errGeneric;
+    status.textContent = '❌ ' + (currentLang === 'en' ? 'Error, please try again' : 'เกิดข้อผิดพลาด กรุณาลองใหม่');
     btn.disabled = false;
     btn.textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
   }
@@ -435,21 +536,17 @@ async function verifyCode() {
   const code = document.getElementById('codeInput').value.trim();
   const btn = document.getElementById('verifyCodeBtn');
   const status = document.getElementById('verifyStatus');
-  const codeMsg = currentLang === 'en' ? 'Please enter the 6-digit code' : 'กรุณากรอกรหัสยืนยัน 6 หลัก';
-  const checkingMsg = currentLang === 'en' ? 'Verifying...' : 'กำลังตรวจสอบ...';
-  const failMsg = currentLang === 'en' ? 'Incorrect code' : 'รหัสไม่ถูกต้อง';
-  const errGeneric = currentLang === 'en' ? 'Error, please try again' : 'เกิดข้อผิดพลาด กรุณาลองใหม่';
 
   if (!code || code.length !== 6) {
     status.className = 'verify-status verify-err';
-    status.textContent = codeMsg;
+    status.textContent = currentLang === 'en' ? 'Please enter the 6-digit code' : 'กรุณากรอกรหัสยืนยัน 6 หลัก';
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = checkingMsg;
+  btn.textContent = currentLang === 'en' ? 'Verifying...' : 'กำลังตรวจสอบ...';
   status.className = 'verify-status verify-loading';
-  status.textContent = checkingMsg;
+  status.textContent = currentLang === 'en' ? 'Verifying...' : 'กำลังตรวจสอบ...';
 
   try {
     const res = await fetch('/landing/verify-code', {
@@ -468,39 +565,33 @@ async function verifyCode() {
       document.getElementById('step2').className = 'step step-active';
       document.getElementById('step2').textContent = '2';
 
-      if (customerType === 'existing') {
-        const found = await retrieveExistingData(email);
-        if (!found) {
-          // Email not found in system - show error and go back
-          const status = document.getElementById('verifyStatus');
-          status.className = 'verify-status verify-err';
-          status.textContent = currentLang === 'en' ? 'Email not found in our system. Please select New Customer.' : 'ไม่พบอีเมลนี้ในระบบ กรุณาเลือก ลูกค้าใหม่';
-          document.getElementById('codeGroup').style.display = 'none';
-          document.getElementById('verifyEmail').readOnly = false;
-          document.getElementById('sendCodeBtn').disabled = false;
-          document.getElementById('sendCodeBtn').textContent = currentLang === 'en' ? 'Send Code' : 'ส่งรหัส';
-          document.getElementById('step1').className = 'step step-active';
-          return;
-        }
-      }
-
       document.getElementById('step1Content').style.display = 'none';
       document.getElementById('step2Content').style.display = 'block';
+
+      if (customerType === 'existing') {
+        await loadExistingCustomerData(email);
+      }
+
+      // Show family section for existing customers (after update or new+existing)
+      if (customerType === 'existing') {
+        showFamilySection();
+        await loadFamilyMembers(email);
+      }
     } else {
       status.className = 'verify-status verify-err';
-      status.textContent = '❌ ' + (data.error || failMsg);
+      status.textContent = '❌ ' + (data.error || (currentLang === 'en' ? 'Incorrect code' : 'รหัสไม่ถูกต้อง'));
       btn.disabled = false;
       btn.textContent = currentLang === 'en' ? 'Verify' : 'ยืนยัน';
     }
   } catch (err) {
     status.className = 'verify-status verify-err';
-    status.textContent = '❌ ' + errGeneric;
+    status.textContent = '❌ ' + (currentLang === 'en' ? 'Error, please try again' : 'เกิดข้อผิดพลาด กรุณาลองใหม่');
     btn.disabled = false;
     btn.textContent = currentLang === 'en' ? 'Verify' : 'ยืนยัน';
   }
 }
 
-async function retrieveExistingData(email) {
+async function loadExistingCustomerData(email) {
   try {
     const res = await fetch('/landing/get-customer', {
       method: 'POST',
@@ -510,31 +601,177 @@ async function retrieveExistingData(email) {
     const data = await res.json();
 
     if (res.ok && data.found) {
+      const c = data.data;
       const rd = document.getElementById('retrievedData');
       const rc = document.getElementById('rdContent');
-      const en = currentLang === 'en';
+
+      // Show IDs
+      if (c.customer_id || c.display_id) {
+        document.getElementById('idDisplay').style.display = 'block';
+        document.getElementById('idDisplay').textContent = '🔑 Customer: ' + (c.display_id || c.customer_id);
+      }
+
       rc.innerHTML = '';
-      if (data.data.name) rc.innerHTML += '<span>' + (en ? 'Name:' : 'ชื่อ:') + '</span> ' + data.data.name + '<br>';
-      if (data.data.phone) rc.innerHTML += '<span>' + (en ? 'Phone:' : 'เบอร์:') + '</span> ' + data.data.phone + '<br>';
-      if (data.data.line_id) rc.innerHTML += '<span>LINE:</span> ' + data.data.line_id + '<br>';
-      if (data.data.messenger_id) rc.innerHTML += '<span>FB:</span> ' + data.data.messenger_id + '<br>';
-      if (data.data.whatsapp) rc.innerHTML += '<span>WA:</span> ' + data.data.whatsapp + '<br>';
+      if (c.name) rc.innerHTML += '<span>' + (currentLang === 'en' ? 'Name:' : 'ชื่อ:') + '</span> ' + c.name + '<br>';
+      if (c.phone) rc.innerHTML += '<span>' + (currentLang === 'en' ? 'Phone:' : 'เบอร์:') + '</span> ' + c.phone + '<br>';
+      if (c.line_id) rc.innerHTML += '<span>LINE:</span> ' + c.line_id + '<br>';
+      if (c.messenger_id) rc.innerHTML += '<span>FB:</span> ' + c.messenger_id + '<br>';
+      if (c.whatsapp) rc.innerHTML += '<span>WA:</span> ' + c.whatsapp + '<br>';
       rd.style.display = 'block';
 
-      if (data.data.name) document.getElementById('fieldName').value = data.data.name;
-      if (data.data.phone) document.getElementById('fieldPhone').value = data.data.phone;
-      if (data.data.line_id) document.getElementById('fieldLine').value = data.data.line_id;
-      if (data.data.messenger_id) document.getElementById('fieldFb').value = data.data.messenger_id;
-      if (data.data.whatsapp) document.getElementById('fieldWa').value = data.data.whatsapp;
-      if (data.data.topic) document.getElementById('fieldTopic').value = data.data.topic;
+      // Pre-fill form for editing the primary contact
+      if (c.name) document.getElementById('fieldName').value = c.name;
+      if (c.phone) document.getElementById('fieldPhone').value = c.phone;
+      if (c.line_id) document.getElementById('fieldLine').value = c.line_id;
+      if (c.messenger_id) document.getElementById('fieldFb').value = c.messenger_id;
+      if (c.whatsapp) document.getElementById('fieldWa').value = c.whatsapp;
+      if (c.topic) document.getElementById('fieldTopic').value = c.topic;
+
+      // Clear individual_id — this is editing the primary contact
+      document.getElementById('hiddenIndividualId').value = '';
+      currentlyEditingIndividual = null;
+      customerData = c;
       return true;
     }
-  } catch (err) {}
+  } catch (err) {
+    console.error('Failed to load customer data:', err);
+  }
   return false;
 }
 
+async function loadFamilyMembers(email) {
+  try {
+    const res = await fetch('/landing/get-family', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
 
-// Submit form - combine country code + phone number
+    if (!res.ok || !data.individuals) return;
+
+    const fl = document.getElementById('familyList');
+    const selfCount = data.individuals.filter(i => i.relationship === 'self').length;
+
+    fl.innerHTML = data.individuals.map(ind => {
+      const isSelf = ind.relationship === 'self' && selfCount <= 1;
+      const badge = isSelf
+        ? '<span class="fm-badge fm-badge-self">Primary</span>'
+        : '<span class="fm-badge">' + ind.relationship.charAt(0).toUpperCase() + ind.relationship.slice(1) + '</span>';
+
+      return '<div class="family-member-card">'
+        + '<div class="fm-info">'
+        + '<div class="fm-name">' + ind.name + ' ' + badge + '</div>'
+        + '<div class="fm-detail">' + (ind.topic ? 'Topic: ' + ind.topic : '') + (ind.individual_id ? ' | ID: ' + ind.individual_id : '') + '</div>'
+        + '</div>'
+        + '<div class="fm-actions">'
+        + '<button class="btn btn-sm btn-outline" onclick="editFamilyMember(\'' + ind.individual_id + '\')" style="font-size:10px;padding:4px 8px;">✏️</button>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+
+    // Show family section if there are members other than self, or if existing customer
+    if (data.individuals.length > 0) {
+      showFamilySection();
+    }
+  } catch (err) {
+    console.error('Failed to load family members:', err);
+  }
+}
+
+function showAddFamily() {
+  document.getElementById('familyForm').classList.add('active');
+  document.getElementById('familyFormTitle').innerHTML = currentLang === 'en' ? '👤 Add Family Member' : '👤 เพิ่มสมาชิกในครอบครัว';
+  document.getElementById('fmName').value = '';
+  document.getElementById('fmRelationship').value = 'spouse';
+  document.getElementById('fmTopic').value = 'residency';
+  document.getElementById('fmError').style.display = 'none';
+  currentlyEditingIndividual = null;
+  document.getElementById('addFamilyBtn').style.display = 'none';
+  document.getElementById('fmName').focus();
+}
+
+function hideAddFamily() {
+  document.getElementById('familyForm').classList.remove('active');
+  document.getElementById('addFamilyBtn').style.display = '';
+  currentlyEditingIndividual = null;
+}
+
+async function editFamilyMember(individualId) {
+  const email = verifiedEmail;
+  if (!email || !individualId) return;
+
+  try {
+    const res = await fetch('/landing/get-individual', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, individual_id: individualId })
+    });
+    const data = await res.json();
+    if (!res.ok) return;
+
+    const ind = data.individual;
+    showAddFamily();
+    document.getElementById('familyFormTitle').innerHTML = currentLang === 'en' ? '✏️ Edit ' + ind.name : '✏️ แก้ไข ' + ind.name;
+    document.getElementById('fmName').value = ind.name;
+    document.getElementById('fmRelationship').value = ind.relationship || 'other';
+    document.getElementById('fmTopic').value = ind.topic || 'other';
+    currentlyEditingIndividual = individualId;
+  } catch (err) {
+    console.error('Failed to load individual:', err);
+  }
+}
+
+async function addFamilyMember() {
+  const name = document.getElementById('fmName').value.trim();
+  const relationship = document.getElementById('fmRelationship').value;
+  const topic = document.getElementById('fmTopic').value;
+  const errEl = document.getElementById('fmError');
+  const btn = document.querySelector('.family-form .btn-full');
+
+  if (!name) {
+    errEl.textContent = currentLang === 'en' ? 'Please enter the name' : 'กรุณากรอกชื่อ';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = currentLang === 'en' ? 'Saving...' : 'กำลังบันทึก...';
+  errEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/landing/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: verifiedEmail,
+        name: name,
+        phone: document.getElementById('fieldPhone').value || '',
+        topic: topic,
+        individual_id: currentlyEditingIndividual || '',
+        relationship: relationship,
+        customer_type: 'existing'
+      })
+    });
+
+    if (res.ok) {
+      hideAddFamily();
+      await loadFamilyMembers(verifiedEmail);
+    } else {
+      const data = await res.json();
+      errEl.textContent = data.error || (currentLang === 'en' ? 'Error saving' : 'บันทึกไม่สำเร็จ');
+      errEl.style.display = 'block';
+    }
+  } catch (err) {
+    errEl.textContent = (currentLang === 'en' ? 'Error, please try again' : 'เกิดข้อผิดพลาด กรุณาลองใหม่');
+    errEl.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.textContent = currentLang === 'en' ? 'Add Family Member' : 'เพิ่มสมาชิก';
+}
+
+// Submit main form
 document.getElementById('leadForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
@@ -569,7 +806,7 @@ document.getElementById('leadForm').addEventListener('submit', async function(e)
     document.getElementById('formCard').style.display = 'none';
     document.getElementById('successCard').style.display = 'block';
   } catch (err) {
-    errEl.textContent = currentLang === 'en' ? 'Error: ' + err.message + '. Please try again.' : 'เกิดข้อผิดพลาด: ' + err.message + ' กรุณาลองอีกครั้ง';
+    errEl.textContent = (currentLang === 'en' ? 'Error: ' + err.message + '. Please try again.' : 'เกิดข้อผิดพลาด: ' + err.message + ' กรุณาลองอีกครั้ง');
     errEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = currentLang === 'en' ? 'Submit' : 'ส่งข้อมูล';

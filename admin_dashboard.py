@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Admin Dashboard v2 — with search, customer IDs, clickable detail view"""
-import json, os, datetime, sys
+"""Admin Dashboard v3 — with Individuals, Case Type Customer Counts, fixes C003 bug"""
+import json, os, datetime, sys, collections
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 CUSTOMERS_DB = r"D:\ImmigrationCases\_Customers.json"
@@ -30,18 +30,24 @@ def scan_customer_activity(cust_id):
     total_files = 0
     total_size = 0
     all_files = []
-    for d in sorted(os.listdir(cust_dir)):
-        dpath = os.path.join(cust_dir, d)
-        if os.path.isdir(dpath):
-            files = sorted([f for f in os.listdir(dpath) if os.path.isfile(os.path.join(dpath, f))])
-            if files:
-                dates.append(d)
-                total_files += len(files)
-                for f in files:
-                    fp = os.path.join(dpath, f)
-                    sz = os.path.getsize(fp)
-                    total_size += sz
-                    all_files.append({"name": f, "date": d, "size_kb": round(sz/1024, 1)})
+    try:
+        for d in sorted(os.listdir(cust_dir)):
+            dpath = os.path.join(cust_dir, d)
+            if os.path.isdir(dpath):
+                files = sorted([f for f in os.listdir(dpath) if os.path.isfile(os.path.join(dpath, f))])
+                if files:
+                    dates.append(d)
+                    total_files += len(files)
+                    for f in files:
+                        fp = os.path.join(dpath, f)
+                        try:
+                            sz = os.path.getsize(fp)
+                        except:
+                            sz = 0
+                        total_size += sz
+                        all_files.append({"name": f, "date": d, "size_kb": round(sz/1024, 1)})
+    except Exception as e:
+        print(f"[SCAN] Error scanning {cust_dir}: {e}")
     return {
         "total_files": total_files,
         "total_size_kb": round(total_size / 1024, 1),
@@ -49,6 +55,33 @@ def scan_customer_activity(cust_id):
         "date_count": len(dates),
         "files": all_files
     }
+
+# ── Case Type Summary ────────────────────────────────────
+
+def get_case_type_summary(db, leads_list):
+    """Count CUSTOMERS per case type (not count of types)"""
+    # Map: case_type -> set of customer IDs (so each customer counted once)
+    type_customers = collections.defaultdict(set)
+    
+    if isinstance(leads_list, list):
+        for lead in leads_list:
+            topic = lead.get("topic", "")
+            email = lead.get("email", "").lower().strip()
+            if topic:
+                # Find which customer this lead belongs to
+                for c in db.get("customers", []):
+                    if c.get("profile", {}).get("email", "").lower().strip() == email:
+                        cid = c.get("displayId") or c.get("customerId")
+                        type_customers[topic].add(cid)
+                        break
+    
+    # Format as sorted list
+    return sorted(
+        [{"type": t.replace("_", " ").title(), "count": len(ids), "customers": list(ids)}
+         for t, ids in type_customers.items()],
+        key=lambda x: -x["count"]
+    )
+
 
 HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -67,6 +100,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-card{background:#fff;padding:16px 18px;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 .stat-card .num{font-size:24px;font-weight:700;color:#2563eb}
 .stat-card .label{font-size:12px;color:#64748b;margin-top:3px}
+.case-type-section{background:#fff;border-radius:10px;padding:16px 18px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.case-type-section h3{font-size:13px;color:#64748b;margin-bottom:10px;font-weight:600}
+.case-type-bar{display:flex;flex-wrap:wrap;gap:8px}
+.case-type-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;flex:1;min-width:140px;text-align:center;cursor:pointer;transition:all 0.2s}
+.case-type-item:hover{border-color:#93c5fd;background:#eff6ff}
+.case-type-item .ct-name{font-size:12px;color:#64748b}
+.case-type-item .ct-count{font-size:22px;font-weight:700;color:#2563eb;margin:4px 0}
+.case-type-item .ct-label{font-size:10px;color:#94a3b8}
 .customer-card{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer;transition:all 0.2s;border:2px solid transparent}
 .customer-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.12);border-color:#93c5fd}
 .customer-card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
@@ -97,6 +138,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .file-item .fname{color:#334155}.file-item .fsize{color:#94a3b8}
 .lead-box{background:#f8fafc;border-radius:8px;padding:12px;font-size:12px;line-height:1.7;margin-top:8px}
 .lead-box .lb-label{color:#64748b}.lead-box .lb-val{color:#334155;font-weight:500}
+.ind-box{background:#f0fdf4;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.6;margin-top:6px}
+.ind-box .ind-label{color:#16a34a;font-weight:600;font-size:11px}
+.ind-box .ind-val{color:#334155}
 .footer{text-align:center;font-size:11px;color:#94a3b8;margin-top:30px;padding:20px}
 </style>
 </head>
@@ -113,14 +157,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <div class="stats-row" id="statsRow">
-  <div class="stat-card"><div class="num" id="totalCustomers">0</div><div class="label">Customers</div></div>
+  <div class="stat-card"><div class="num" id="totalCustomers">0</div><div class="label">Customers (Families)</div></div>
+  <div class="stat-card"><div class="num" id="totalIndividuals">0</div><div class="label">Individuals</div></div>
   <div class="stat-card"><div class="num" id="totalMessages">0</div><div class="label">Files</div></div>
   <div class="stat-card"><div class="num" id="newToday">0</div><div class="label">New Today</div></div>
-  <div class="stat-card"><div class="num" id="caseTypes">0</div><div class="label">Case Types</div></div>
+</div>
+
+<!-- Case Type Summary: Count of Customers per Case Type -->
+<div class="case-type-section" id="caseTypeSection">
+  <h3>📊 Customers by Case Type</h3>
+  <div class="case-type-bar" id="caseTypeBar"></div>
 </div>
 
 <div id="customerList"></div>
-<div class="footer">Nova Immigration System | Real-time data</div>
+<div class="footer">Nova Immigration System v3 | Family Members | Real-time data</div>
 
 <!-- Detail Overlay -->
 <div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
@@ -136,8 +186,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 let customersData = [];
 let currentLang = 'en';
 
-function switchLang(l){currentLang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l))}
-
 async function loadData(){
   try{
     const r=await fetch('/admin/api/data');if(!r.ok)throw Error();
@@ -145,25 +193,69 @@ async function loadData(){
     customersData=d.customers;
     const s=d.stats;
     document.getElementById('totalCustomers').textContent=s.total_customers;
+    document.getElementById('totalIndividuals').textContent=s.total_individuals;
     document.getElementById('totalMessages').textContent=s.total_files;
     document.getElementById('newToday').textContent=s.new_today;
-    document.getElementById('caseTypes').textContent=s.case_types;
+    renderCaseTypes(d.case_types);
     renderCustomers(d.customers);
   }catch(e){document.getElementById('customerList').innerHTML='<div class="no-result">Failed to load data</div>'}
+}
+
+function renderCaseTypes(types){
+  const el=document.getElementById('caseTypeBar');
+  if(!types||!types.length){
+    el.innerHTML='<div style="font-size:12px;color:#94a3b8">No case type data yet</div>';
+    return;
+  }
+  el.innerHTML=types.map(t=>{
+    const pct=Math.round((t.count/Math.max(...types.map(x=>x.count)))*100);
+    return '<div class="case-type-item" onclick="filterByCaseType(\\''+t.type+'\\')">'
+      +'<div class="ct-name">'+t.type+'</div>'
+      +'<div class="ct-count">'+t.count+'</div>'
+      +'<div class="ct-label">customer'+(t.count>1?'s':'')+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+let caseTypeFilter = null;
+
+function filterByCaseType(type){
+  caseTypeFilter=(caseTypeFilter===type)?null:type;
+  renderCustomers(customersData);
 }
 
 function renderCustomers(list){
   const el=document.getElementById('customerList');
   const search=document.getElementById('searchInput').value.toLowerCase().trim();
-  const filtered=search?list.filter(c=>{
-    const p=c.profile;
-    const q=search;
-    return (p.name||'').toLowerCase().includes(q)
-        || (p.email||'').toLowerCase().includes(q)
-        || (p.phone||'').includes(q)
-        || (c.displayId||'').toLowerCase().includes(q)
-        || (c.customerId||'').toLowerCase().includes(q);
-  }):list;
+  let filtered=list;
+
+  // Apply case type filter
+  if(caseTypeFilter){
+    filtered=filtered.filter(c=>c.case_type&&c.case_type.toLowerCase().includes(caseTypeFilter.toLowerCase()));
+    document.getElementById('searchInput').placeholder='Filtered: '+caseTypeFilter+' (click again to clear)';
+  } else {
+    document.getElementById('searchInput').placeholder='Search by name, email, phone, ID...';
+  }
+
+  // Apply search
+  if(search){
+    filtered=filtered.filter(c=>{
+      const p=c.profile;
+      if((p.name||'').toLowerCase().includes(search))return true;
+      if((p.email||'').toLowerCase().includes(search))return true;
+      if((p.phone||'').includes(search))return true;
+      if((c.displayId||'').toLowerCase().includes(search))return true;
+      if((c.customerId||'').toLowerCase().includes(search))return true;
+      // Search individuals too
+      if(c.individuals){
+        for(const ind of c.individuals){
+          if((ind.name||'').toLowerCase().includes(search))return true;
+          if((ind.individualId||'').toLowerCase().includes(search))return true;
+        }
+      }
+      return false;
+    });
+  }
 
   document.getElementById('resultCount').textContent=filtered.length+' / '+list.length;
 
@@ -181,17 +273,19 @@ function renderCustomers(list){
     if(p.email)chs.push('<span class="channel-tag">Email</span>');
     const badge=c.is_new?'<span class="badge badge-new">NEW</span>':'';
     const act=c.activity;
+    const indCount=c.individuals?c.individuals.length:1;
     return '<div class="customer-card" onclick="showDetail(\\''+c.customerId+'\\')">'
       +'<div class="top"><div class="name">'+p.name+' '+badge+'</div><div class="cid">'+(c.displayId||c.customerId)+'</div></div>'
       +'<div class="detail">📞 <span>'+(p.phone||'—')+'</span> &nbsp;📧 <span>'+(p.email||'—')+'</span></div>'
+      +'<div class="detail" style="font-size:11px;color:#16a34a">👤 <strong>'+indCount+'</strong> individual'+(indCount>1?'s':'')+'</div>'
       +'<div class="channels">'+chs.join('')+'</div>'
-      + (c.topic ? '<div class="detail" style="margin-top:4px;font-size:12px;color:#2563eb">Topic: ' + c.topic + '</div>' : '')
+      + (c.case_type ? '<div class="detail" style="margin-top:4px;font-size:12px;color:#2563eb">Topic: ' + c.case_type + '</div>' : '')
       +'<div class="activity-bar">📁 '+act.total_files+' files ('+act.total_size_kb+' KB)'+(act.last_activity?' | '+act.last_activity:'')+'</div>'
       +'</div>';
   }).join('');
 }
 
-function filterCustomers(){renderCustomers(customersData)}
+function filterCustomers(){caseTypeFilter=null;renderCustomers(customersData)}
 
 async function showDetail(custId){
   try{
@@ -200,7 +294,7 @@ async function showDetail(custId){
     const c=d.customer,p=c.profile,ch=c.channels,act=d.activity;
     document.getElementById('detailName').textContent=p.name;
     document.getElementById('detailId').textContent=c.displayId||c.customerId;
-    
+
     let html='<div class="detail-section"><h3>Profile</h3><table class="detail-table">'
       +'<tr><td>Phone</td><td>'+(p.phone||'—')+'</td></tr>'
       +'<tr><td>Email</td><td>'+(p.email||'—')+'</td></tr>'
@@ -209,6 +303,21 @@ async function showDetail(custId){
     if(ch.whatsapp)html+='WA: '+ch.whatsapp+'<br>';
     if(ch.line)html+='LINE: '+ch.line.join(', ')+'<br>';
     html+='</td></tr></table></div>';
+
+    // Individuals
+    if(c.individuals&&c.individuals.length){
+      html+='<div class="detail-section"><h3>👨‍👩‍👧‍👦 Individuals ('+c.individuals.length+')</h3>';
+      c.individuals.forEach(ind=>{
+        html+='<div class="ind-box">'
+          +'<span class="ind-label">'+ind.individualId+'</span> | '
+          +'<span class="ind-val">'+ind.name+'</span>'
+          + (ind.relationship?' <span style="color:#64748b">('+ind.relationship+')</span>':'')
+          +'<br>'
+          + (ind.topic?'<span class="ind-label">Topic:</span> <span class="ind-val">'+ind.topic+'</span>':'')
+          +'</div>';
+      });
+      html+='</div>';
+    }
 
     // Lead info
     if(d.lead){
@@ -232,7 +341,7 @@ async function showDetail(custId){
     document.getElementById('detailBody').innerHTML=html;
     document.getElementById('detailOverlay').style.display='block';
   }catch(e){
-    document.getElementById('detailBody').innerHTML='<div class="no-result">Error loading details</div>';
+    document.getElementById('detailBody').innerHTML='<div class="no-result">Error loading details: check folder/data</div>';
     document.getElementById('detailOverlay').style.display='block';
   }
 }
@@ -270,7 +379,8 @@ class AdminHandler(BaseHTTPRequestHandler):
         today = datetime.datetime.now().strftime("%Y-%m-%d")
         new_today = 0
         total_files = 0
-        case_types = set()
+        total_individuals = 0
+        case_type_summary = get_case_type_summary(db, leads_list)
         customers_data = []
 
         for c in db.get("customers", []):
@@ -278,12 +388,21 @@ class AdminHandler(BaseHTTPRequestHandler):
             activity = scan_customer_activity(cid)
             total_files += activity["total_files"]
             is_new = c.get("createdAt", "").startswith(today) if c.get("createdAt") else False
-            # Get topic from leads
-            topic = ""
-            for lead in leads_list:
-                if lead.get("email") == c["profile"].get("email"):
-                    topic = lead.get("topic", "")
-                    break
+            # Count individuals
+            individuals = c.get("individuals", [])
+            total_individuals += len(individuals) if individuals else 1
+
+            # Get case type from first individual or lead
+            case_type = ""
+            if individuals:
+                # Use primary individual's topic
+                for ind in individuals:
+                    if ind.get("relationship") in ("self", ""):
+                        case_type = ind.get("topic", "")
+                        break
+                if not case_type and individuals:
+                    case_type = individuals[0].get("topic", "")
+
             customers_data.append({
                 "customerId": cid,
                 "displayId": c.get("displayId", ""),
@@ -291,42 +410,62 @@ class AdminHandler(BaseHTTPRequestHandler):
                 "channels": c["channels"],
                 "activity": activity,
                 "is_new": is_new,
-                "topic": topic
+                "case_type": case_type,
+                "individuals": individuals
             })
             # Count new today from leads
             for lead in leads_list:
                 if lead.get("submitted_at", "").startswith(today):
                     new_today += 1
-                if lead.get("topic"):
-                    case_types.add(lead["topic"])
 
         data = {
             "stats": {
                 "total_customers": len(db.get("customers", [])),
+                "total_individuals": total_individuals,
                 "total_files": total_files,
-                "new_today": new_today,
-                "case_types": len(case_types)
+                "new_today": new_today
             },
+            "case_types": case_type_summary,
             "customers": customers_data
         }
         self._json_response(200, data)
 
     def _send_customer_detail(self, cust_id):
         db = load_json(CUSTOMERS_DB)
-        leads = load_json(LEADS_FILE) if isinstance(load_json(LEADS_FILE), list) else []
+        leads_data = load_json(LEADS_FILE)
+        leads_list = leads_data if isinstance(leads_data, list) else []
         customer = None
         for c in db.get("customers", []):
             if c.get("customerId") == cust_id or c.get("displayId") == cust_id:
                 customer = c; break
         if not customer:
             self._json_response(404, {"error": "Not found"}); return
-        # Use customerId (folder name) for activity scan
+
         folder_name = customer["customerId"]
+        # ═══ FIX C003 BUG ═══
+        # scan_customer_activity now handles missing folders gracefully
         activity = scan_customer_activity(folder_name)
+
+        # Get topic from individual (primary)
+        topic = ""
+        individuals = customer.get("individuals", [])
+        if individuals:
+            for ind in individuals:
+                if ind.get("relationship") in ("self", ""):
+                    topic = ind.get("topic", "")
+                    break
+            if not topic and individuals:
+                topic = individuals[0].get("topic", "")
+
         lead_info = None
-        for lead in leads:
+        for lead in leads_list:
             if lead.get("email") == customer["profile"].get("email"):
                 lead_info = lead; break
+
+        # If lead_info has no topic, use from individuals
+        if lead_info and not lead_info.get("topic") and topic:
+            lead_info["topic"] = topic
+
         self._json_response(200, {"customer": customer, "activity": activity, "lead": lead_info})
 
     def _html_response(self, html):
@@ -346,6 +485,7 @@ class AdminHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     s = HTTPServer(("0.0.0.0", PORT), AdminHandler)
-    print(f"[ADMIN] Dashboard v2 on port {PORT}")
+    print(f"[ADMIN] Dashboard v3 on port {PORT}")
+    print(f"[ADMIN] Features: Case Type by Customer Count | Individuals | C003 fix")
     try: s.serve_forever()
     except KeyboardInterrupt: s.server_close()
