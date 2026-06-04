@@ -353,7 +353,7 @@ def verify_code(email, user_code):
     if entry["code"] != user_code:
         return False, "รหัสยืนยันไม่ถูกต้อง"
     expiry = datetime.datetime.fromisoformat(entry["expires"])
-    if datetime.datetime.now() > expiry.replace(tzinfo=None):
+    if datetime.datetime.now() > expiry:
         del codes[email]
         save_codes(codes)
         return False, "รหัสยืนยันหมดอายุแล้ว กรุณาขอรหัสใหม่"
