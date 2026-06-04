@@ -233,7 +233,11 @@ def _save_lead_backup(data, individual, is_new):
     leads = []
     if os.path.exists(LEADS_FILE):
         with open(LEADS_FILE, "r", encoding="utf-8") as f:
-            leads = json.load(f) if isinstance(json.load(f), list) else []
+            try:
+                loaded = json.load(f)
+                leads = loaded if isinstance(loaded, list) else []
+            except:
+                leads = []
     entry = {
         "name": data.get("name", ""),
         "phone": data.get("phone", ""),
@@ -365,6 +369,7 @@ def verify_code(email, user_code):
 # ── Send Email via Gmail API ────────────────────────────
 
 def send_email(to_email, subject, body):
+    import traceback
     try:
         from google.auth.transport.requests import Request
         from googleapiclient.discovery import build
@@ -376,21 +381,29 @@ def send_email(to_email, subject, body):
 
         with open(token_file, "rb") as f:
             creds = pickle.load(f)
+        print(f"[EMAIL DEBUG] Token expired: {creds.expired}", flush=True)
         if creds.expired:
             creds.refresh(Request())
+            with open(token_file, "wb") as f:
+                pickle.dump(creds, f)
+            print(f"[EMAIL DEBUG] Token refreshed and saved", flush=True)
 
+        print(f"[EMAIL DEBUG] Building service...", flush=True)
         service = build("gmail", "v1", credentials=creds, cache_discovery=False)
+        print(f"[EMAIL DEBUG] Service built OK", flush=True)
 
         message = MIMEText(body, "plain", "utf-8")
         message["to"] = to_email
         message["subject"] = subject
 
         raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
-        service.users().messages().send(userId="me", body={"raw": raw}).execute()
-        print(f"[EMAIL] Sent to {to_email}: {subject}")
+        result = service.users().messages().send(userId="me", body={"raw": raw}).execute()
+        print(f"[EMAIL] Sent OK id={result.get('id')}", flush=True)
         return True
     except Exception as e:
-        print(f"[EMAIL] Failed: {e}")
+        tb = traceback.format_exc()
+        print(f"[EMAIL] EXCEPTION: {e}", flush=True)
+        print(f"[EMAIL] TRACEBACK: {tb}", flush=True)
         return False
 
 
@@ -437,11 +450,14 @@ class LandingHandler(BaseHTTPRequestHandler):
 The Global Manpower Immigration Services
 tgm.kuntheec@gmail.com
 """
+            print(f"[LANDING] Sending code to {email}", flush=True)
             sent = send_email(email, subject, body_text)
             print(f"[DEBUG] send_email returned: {sent} (type: {type(sent)})")  # ← เพิ่มบรรทัดนี้
             if sent:
+                print(f"[LANDING] Code sent OK to {email}", flush=True)
                 self._json_response(200, {"status": "sent", "message": "ส่งรหัสยืนยันไปยังอีเมลของคุณแล้ว"})
             else:
+                print(f"[LANDING] send_email returned False for {email}", flush=True)
                 self._json_response(500, {"error": "ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง"})
 
         elif path == "/verify-code":
