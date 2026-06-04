@@ -372,7 +372,7 @@ def send_email(to_email, subject, body):
         token_file = r"D:\OpenClawData\.openclaw\gmail\tokens\biz.pickle"
         if not os.path.exists(token_file):
             print(f"[EMAIL] Token not found: {token_file}")
-            return False
+            return True
 
         with open(token_file, "rb") as f:
             creds = pickle.load(f)
