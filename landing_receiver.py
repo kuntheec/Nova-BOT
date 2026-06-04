@@ -340,7 +340,7 @@ def generate_code(email):
     code = str(random.randint(100000, 999999))
     codes[email] = {
         "code": code,
-        "expires": (datetime.datetime.now() + datetime.timedelta(minutes=2)).isoformat()
+        "expires": (datetime.datetime.now() + datetime.timedelta(minutes=20)).isoformat()
     }
     save_codes(codes)
     return code
