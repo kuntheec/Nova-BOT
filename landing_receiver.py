@@ -340,7 +340,7 @@ def generate_code(email):
     code = str(random.randint(100000, 999999))
     codes[email] = {
         "code": code,
-        "expires": (datetime.datetime.now() + datetime.timedelta(minutes=10)).isoformat()
+        "expires": (datetime.datetime.now() + datetime.timedelta(minutes=2)).isoformat()
     }
     save_codes(codes)
     return code
@@ -353,7 +353,7 @@ def verify_code(email, user_code):
     if entry["code"] != user_code:
         return False, "รหัสยืนยันไม่ถูกต้อง"
     expiry = datetime.datetime.fromisoformat(entry["expires"])
-    if datetime.datetime.now() > expiry:
+    if datetime.datetime.now() > expiry.replace(tzinfo=None):
         del codes[email]
         save_codes(codes)
         return False, "รหัสยืนยันหมดอายุแล้ว กรุณาขอรหัสใหม่"
