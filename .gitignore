@@ -11,3 +11,23 @@ cookies_*
 *.png
 *.jpg
 *.jpeg
+
+
+# Temporary / pending OCR files
+_pending_ocr/
+*.tmp
+*.sent
+*.missing
+
+# Backup dedup and report files
+_drive_dedup.json
+_backup_report.json
+
+# Customer data files (if you don't want to commit them)
+_Customers.json
+_leads.json
+_verify_codes.json
+_incoming.log
+
+# Optional: ignore example env file (if you create one)
+.env.example
