@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Admin Dashboard v3 — with Individuals, Case Type Customer Counts, fixes C003 bug"""
-import json, os, datetime, sys, collections
-from http.server import HTTPServer, BaseHTTPRequestHandler
+"""Admin Dashboard v3 — with Individuals, Case Type Customer Counts
+Fixes: Issue #1 – Use displayId for folder scanning; Issue #2 – New Today count bug.
+"""
 
-CUSTOMERS_DB = r"D:\ImmigrationCases\_Customers.json"
-LEADS_FILE = r"D:\ImmigrationCases\_leads.json"
-IMMIGRATION_DIR = r"D:\ImmigrationCases"
-PORT = 5004
+import json, os, datetime, sys, collections, urllib.parse, re
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from dotenv import load_dotenv
+load_dotenv()
+
+# Configurable paths
+BASE_DIR = os.getenv("BASE_DIR", r"D:\ImmigrationCases")
+CUSTOMERS_DB = os.getenv("CUSTOMERS_DB", os.path.join(BASE_DIR, "_Customers.json"))
+LEADS_FILE = os.getenv("LEADS_FILE", os.path.join(BASE_DIR, "_leads.json"))
+PORT = int(os.getenv("ADMIN_PORT", "5004"))
 
 def load_json(path):
     if os.path.exists(path):
@@ -14,74 +20,73 @@ def load_json(path):
             return json.load(f)
     return {}
 
-def get_customer_folders():
-    folders = []
-    for item in os.listdir(IMMIGRATION_DIR):
-        fpath = os.path.join(IMMIGRATION_DIR, item)
-        if os.path.isdir(fpath) and not item.startswith("_"):
-            folders.append(item)
-    return sorted(folders)
-
-def scan_customer_activity(cust_id):
-    cust_dir = os.path.join(IMMIGRATION_DIR, cust_id)
+def scan_customer_activity(folder_id):
+    """Scan folder by displayId (or customerId)."""
+    cust_dir = os.path.join(BASE_DIR, folder_id)
     if not os.path.exists(cust_dir):
         return {"total_files": 0, "total_size_kb": 0, "last_activity": "", "files": []}
-    dates = []
-    total_files = 0
-    total_size = 0
     all_files = []
-    try:
-        for d in sorted(os.listdir(cust_dir)):
-            dpath = os.path.join(cust_dir, d)
-            if os.path.isdir(dpath):
-                files = sorted([f for f in os.listdir(dpath) if os.path.isfile(os.path.join(dpath, f))])
-                if files:
-                    dates.append(d)
-                    total_files += len(files)
-                    for f in files:
-                        fp = os.path.join(dpath, f)
-                        try:
-                            sz = os.path.getsize(fp)
-                        except:
-                            sz = 0
-                        total_size += sz
-                        all_files.append({"name": f, "date": d, "size_kb": round(sz/1024, 1)})
-    except Exception as e:
-        print(f"[SCAN] Error scanning {cust_dir}: {e}")
+    total_size = 0
+    latest_mtime = 0
+    latest_date_str = ""
+    for root, dirs, files in os.walk(cust_dir):
+        for f in files:
+            if f.endswith('.meta') or f.endswith('.ocr.txt'):
+                continue
+            filepath = os.path.join(root, f)
+            try:
+                mtime = os.path.getmtime(filepath)
+                size = os.path.getsize(filepath)
+            except OSError:
+                continue
+            total_size += size
+            rel_path = os.path.relpath(filepath, cust_dir)
+            parts = rel_path.split(os.sep)
+            date_str = ""
+            for part in parts:
+                if re.match(r'^\d{4}-\d{2}-\d{2}$', part):
+                    date_str = part
+                    break
+            if not date_str:
+                date_str = datetime.datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
+            if mtime > latest_mtime:
+                latest_mtime = mtime
+                latest_date_str = date_str
+            all_files.append({
+                "name": f,
+                "date": date_str,
+                "size_kb": round(size / 1024, 1),
+                "path": rel_path
+            })
+    if latest_mtime > 0:
+        last_activity = latest_date_str
+    else:
+        last_activity = ""
     return {
-        "total_files": total_files,
+        "total_files": len(all_files),
         "total_size_kb": round(total_size / 1024, 1),
-        "last_activity": dates[-1] if dates else "",
-        "date_count": len(dates),
+        "last_activity": last_activity,
+        "date_count": len(set(f["date"] for f in all_files)),
         "files": all_files
     }
 
-# ── Case Type Summary ────────────────────────────────────
-
 def get_case_type_summary(db, leads_list):
-    """Count CUSTOMERS per case type (not count of types)"""
-    # Map: case_type -> set of customer IDs (so each customer counted once)
     type_customers = collections.defaultdict(set)
-    
     if isinstance(leads_list, list):
         for lead in leads_list:
             topic = lead.get("topic", "")
             email = lead.get("email", "").lower().strip()
             if topic:
-                # Find which customer this lead belongs to
                 for c in db.get("customers", []):
                     if c.get("profile", {}).get("email", "").lower().strip() == email:
                         cid = c.get("displayId") or c.get("customerId")
                         type_customers[topic].add(cid)
                         break
-    
-    # Format as sorted list
     return sorted(
         [{"type": t.replace("_", " ").title(), "count": len(ids), "customers": list(ids)}
          for t, ids in type_customers.items()],
         key=lambda x: -x["count"]
     )
-
 
 HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -121,7 +126,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;margin-left:6px}
 .badge-new{background:#dbeafe;color:#1d4ed8}
 .no-result{text-align:center;padding:40px;color:#94a3b8;font-size:14px}
-/* Detail View */
 .detail-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:100;padding:20px;overflow-y:auto}
 .detail-card{background:#fff;border-radius:16px;max-width:600px;margin:40px auto;padding:30px}
 .detail-card h2{font-size:18px;margin-bottom:4px}
@@ -163,7 +167,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="stat-card"><div class="num" id="newToday">0</div><div class="label">New Today</div></div>
 </div>
 
-<!-- Case Type Summary: Count of Customers per Case Type -->
 <div class="case-type-section" id="caseTypeSection">
   <h3>📊 Customers by Case Type</h3>
   <div class="case-type-bar" id="caseTypeBar"></div>
@@ -172,7 +175,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div id="customerList"></div>
 <div class="footer">Nova Immigration System v3 | Family Members | Real-time data</div>
 
-<!-- Detail Overlay -->
 <div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
   <div class="detail-card" id="detailCard">
     <button class="close" onclick="closeDetail()">×</button>
@@ -208,7 +210,6 @@ function renderCaseTypes(types){
     return;
   }
   el.innerHTML=types.map(t=>{
-    const pct=Math.round((t.count/Math.max(...types.map(x=>x.count)))*100);
     return '<div class="case-type-item" onclick="filterByCaseType(\\''+t.type+'\\')">'
       +'<div class="ct-name">'+t.type+'</div>'
       +'<div class="ct-count">'+t.count+'</div>'
@@ -228,16 +229,12 @@ function renderCustomers(list){
   const el=document.getElementById('customerList');
   const search=document.getElementById('searchInput').value.toLowerCase().trim();
   let filtered=list;
-
-  // Apply case type filter
   if(caseTypeFilter){
     filtered=filtered.filter(c=>c.case_type&&c.case_type.toLowerCase().includes(caseTypeFilter.toLowerCase()));
     document.getElementById('searchInput').placeholder='Filtered: '+caseTypeFilter+' (click again to clear)';
   } else {
     document.getElementById('searchInput').placeholder='Search by name, email, phone, ID...';
   }
-
-  // Apply search
   if(search){
     filtered=filtered.filter(c=>{
       const p=c.profile;
@@ -246,7 +243,6 @@ function renderCustomers(list){
       if((p.phone||'').includes(search))return true;
       if((c.displayId||'').toLowerCase().includes(search))return true;
       if((c.customerId||'').toLowerCase().includes(search))return true;
-      // Search individuals too
       if(c.individuals){
         for(const ind of c.individuals){
           if((ind.name||'').toLowerCase().includes(search))return true;
@@ -256,14 +252,11 @@ function renderCustomers(list){
       return false;
     });
   }
-
   document.getElementById('resultCount').textContent=filtered.length+' / '+list.length;
-
   if(!filtered.length){
     el.innerHTML='<div class="no-result">No customers found</div>';
     return;
   }
-
   el.innerHTML=filtered.map(c=>{
     const p=c.profile,ch=c.channels;
     const chs=[];
@@ -294,17 +287,14 @@ async function showDetail(custId){
     const c=d.customer,p=c.profile,ch=c.channels,act=d.activity;
     document.getElementById('detailName').textContent=p.name;
     document.getElementById('detailId').textContent=c.displayId||c.customerId;
-
     let html='<div class="detail-section"><h3>Profile</h3><table class="detail-table">'
-      +'<tr><td>Phone</td><td>'+(p.phone||'—')+'</td></tr>'
-      +'<tr><td>Email</td><td>'+(p.email||'—')+'</td></tr>'
-      +'<tr><td>Channels</td><td>';
+      +'<tr><td>Phone<\/td><td>'+(p.phone||'—')+'<\/td><\/tr>'
+      +'<tr><td>Email<\/td><td>'+(p.email||'—')+'<\/td><\/tr>'
+      +'<tr><td>Channels<\/td><td>';
     if(ch.messenger)html+='FB: '+ch.messenger+'<br>';
     if(ch.whatsapp)html+='WA: '+ch.whatsapp+'<br>';
     if(ch.line)html+='LINE: '+ch.line.join(', ')+'<br>';
-    html+='</td></tr></table></div>';
-
-    // Individuals
+    html+='<\/td><\/tr><\/table><\/div>';
     if(c.individuals&&c.individuals.length){
       html+='<div class="detail-section"><h3>👨‍👩‍👧‍👦 Individuals ('+c.individuals.length+')</h3>';
       c.individuals.forEach(ind=>{
@@ -318,8 +308,6 @@ async function showDetail(custId){
       });
       html+='</div>';
     }
-
-    // Lead info
     if(d.lead){
       const l=d.lead;
       html+='<div class="detail-section"><h3>Registration Info</h3><div class="lead-box">'
@@ -328,8 +316,6 @@ async function showDetail(custId){
       if(l.customer_type)html+='<span class="lb-label">Type:</span> <span class="lb-val">'+l.customer_type+'</span>';
       html+='</div></div>';
     }
-
-    // Files
     if(act.files&&act.files.length){
       html+='<div class="detail-section"><h3>Files ('+act.files.length+')</h3><div class="file-list">';
       act.files.slice().reverse().slice(0,30).forEach(f=>{
@@ -337,7 +323,6 @@ async function showDetail(custId){
       });
       html+='</div></div>';
     }
-
     document.getElementById('detailBody').innerHTML=html;
     document.getElementById('detailOverlay').style.display='block';
   }catch(e){
@@ -367,7 +352,7 @@ class AdminHandler(BaseHTTPRequestHandler):
         elif path in ("/api/data", "/admin/api/data"):
             self._send_json()
         elif path.startswith("/api/customer/") or path.startswith("/admin/api/customer/"):
-            cust_id = path.rstrip("/").split("/")[-1]
+            cust_id = urllib.parse.unquote(path.rstrip("/").split("/")[-1])
             self._send_customer_detail(cust_id)
         else:
             self.send_response(404); self.end_headers()
@@ -377,34 +362,34 @@ class AdminHandler(BaseHTTPRequestHandler):
         leads_data = load_json(LEADS_FILE)
         leads_list = leads_data if isinstance(leads_data, list) else []
         today = datetime.datetime.now().strftime("%Y-%m-%d")
-        new_today = 0
+        # Issue #2 fix: count unique leads submitted today
+        leads_today = set()
+        for lead in leads_list:
+            if lead.get("submitted_at", "").startswith(today):
+                leads_today.add(lead.get("email", ""))
+        new_today = len(leads_today)
         total_files = 0
         total_individuals = 0
         case_type_summary = get_case_type_summary(db, leads_list)
         customers_data = []
-
         for c in db.get("customers", []):
-            cid = c["customerId"]
-            activity = scan_customer_activity(cid)
+            # Issue #1 fix: use displayId for folder scanning
+            folder_id = c.get("displayId") or c["customerId"]
+            activity = scan_customer_activity(folder_id)
             total_files += activity["total_files"]
             is_new = c.get("createdAt", "").startswith(today) if c.get("createdAt") else False
-            # Count individuals
             individuals = c.get("individuals", [])
             total_individuals += len(individuals) if individuals else 1
-
-            # Get case type from first individual or lead
             case_type = ""
             if individuals:
-                # Use primary individual's topic
                 for ind in individuals:
                     if ind.get("relationship") in ("self", ""):
                         case_type = ind.get("topic", "")
                         break
                 if not case_type and individuals:
                     case_type = individuals[0].get("topic", "")
-
             customers_data.append({
-                "customerId": cid,
+                "customerId": c["customerId"],
                 "displayId": c.get("displayId", ""),
                 "profile": c["profile"],
                 "channels": c["channels"],
@@ -413,11 +398,6 @@ class AdminHandler(BaseHTTPRequestHandler):
                 "case_type": case_type,
                 "individuals": individuals
             })
-            # Count new today from leads
-            for lead in leads_list:
-                if lead.get("submitted_at", "").startswith(today):
-                    new_today += 1
-
         data = {
             "stats": {
                 "total_customers": len(db.get("customers", [])),
@@ -440,15 +420,11 @@ class AdminHandler(BaseHTTPRequestHandler):
                 customer = c; break
         if not customer:
             self._json_response(404, {"error": "Not found"}); return
-
-        folder_name = customer["customerId"]
-        # ═══ FIX C003 BUG ═══
-        # scan_customer_activity now handles missing folders gracefully
-        activity = scan_customer_activity(folder_name)
-
-        # Get topic from individual (primary)
-        topic = ""
+        # Issue #1: use displayId for folder
+        folder_id = customer.get("displayId") or customer["customerId"]
+        activity = scan_customer_activity(folder_id)
         individuals = customer.get("individuals", [])
+        topic = ""
         if individuals:
             for ind in individuals:
                 if ind.get("relationship") in ("self", ""):
@@ -456,16 +432,12 @@ class AdminHandler(BaseHTTPRequestHandler):
                     break
             if not topic and individuals:
                 topic = individuals[0].get("topic", "")
-
         lead_info = None
         for lead in leads_list:
             if lead.get("email") == customer["profile"].get("email"):
                 lead_info = lead; break
-
-        # If lead_info has no topic, use from individuals
         if lead_info and not lead_info.get("topic") and topic:
             lead_info["topic"] = topic
-
         self._json_response(200, {"customer": customer, "activity": activity, "lead": lead_info})
 
     def _html_response(self, html):
@@ -486,6 +458,8 @@ class AdminHandler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     s = HTTPServer(("0.0.0.0", PORT), AdminHandler)
     print(f"[ADMIN] Dashboard v3 on port {PORT}")
-    print(f"[ADMIN] Features: Case Type by Customer Count | Individuals | C003 fix")
-    try: s.serve_forever()
-    except KeyboardInterrupt: s.server_close()
+    print(f"[ADMIN] BASE_DIR: {BASE_DIR}")
+    try:
+        s.serve_forever()
+    except KeyboardInterrupt:
+        s.server_close()
